@@ -81,8 +81,8 @@ package repositories {
     }
 
     interface ProfileRepository {
-        + findByUserId(userId: long): Profile
-        + deleteByUserId(userId: long): void
+        + findByUser_UserId(userId: long): Profile
+        + deleteByUser_UserId(userId: long): void
     }
 
     interface ScholarshipRepository {
@@ -92,9 +92,9 @@ package repositories {
     }
 
     interface ApplicationRepository {
-        + findByUserId(userId: long): List<Application>
+        + findByUser_UserId(userId: long): List<Application>
         + findByStatus(status: ApplicationStatus): List<Application>
-        + findByUserIdAndStatus(userId: long, status: ApplicationStatus): List<Application>
+        + findByUser_UserIdAndStatus(userId: long, status: ApplicationStatus): List<Application>
     }
 
     JpaRepository <|-- UserRepository : extends
