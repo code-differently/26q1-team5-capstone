@@ -1,0 +1,232 @@
+@startuml
+
+title Scholarship Application System
+left to right direction
+scale 2
+
+package entities {
+    class User {
+        - userId: long
+        - username: String
+        - passwordHash: String
+        - role: String
+        + getUserId(): long
+        + getUsername(): String
+        + getRole(): String
+        + setUsername(name: String): void
+        + setPassword(password: String): void
+        + setRole(role: String): void
+    }
+
+    class Profile {
+        - profileId: long
+        - userId: long
+        - name: String
+        - gpa: Double
+        - major: String
+        - enrollmentStatus: String
+        - needsFinancialAid: Boolean
+        - state: String
+        - ethnicity: String
+        - careerGoals: String
+        - interests: String
+        + getters / setters for all fields
+    }
+
+    class Scholarship {
+        - scholarshipId: long
+        - name: String
+        - description: String
+        - amount: Double
+        - deadline: LocalDate
+        - eligibilityCriteria: String
+        - applicationUrl: String
+        - fieldOfStudy: String
+        - state: String
+        - sourceApi: String
+        + getters / setters for all fields
+    }
+
+    class Application {
+        - applicationId: long
+        - user: User
+        - scholarship: Scholarship
+        - status: ApplicationStatus
+        - savedDate: LocalDate
+        - submittedDate: LocalDate
+        - deadlineAlert: LocalDate
+        - notes: String
+        + getters / setters for all fields
+    }
+
+    enum ApplicationStatus {
+        SAVED
+        IN_PROGRESS
+        SUBMITTED
+        AWARDED
+        REJECTED
+    }
+}
+
+User "1" -- "1" Profile : owns (cascade delete)
+User "1" -- "0..*" Application : tracks
+Scholarship "1" -- "0..*" Application : referenced by
+Application --> ApplicationStatus : has status
+
+package repositories {
+    note "All repositories extend JpaRepository\nand use Spring Boot's @Repository annotation" as N
+
+    interface UserRepository {
+        + findByUsername(username: String): User
+    }
+
+    interface ProfileRepository {
+        + findByUserId(userId: long): Profile
+        + deleteByUserId(userId: long): void
+    }
+
+    interface ScholarshipRepository {
+        + findByFieldOfStudy(field: String): List<Scholarship>
+        + findByState(state: String): List<Scholarship>
+        + findByDeadlineAfter(date: LocalDate): List<Scholarship>
+    }
+
+    interface ApplicationRepository {
+        + findByUserId(userId: long): List<Application>
+        + findByStatus(status: ApplicationStatus): List<Application>
+        + findByUserIdAndStatus(userId: long, status: ApplicationStatus): List<Application>
+    }
+
+    JpaRepository <|-- UserRepository : extends
+    JpaRepository <|-- ProfileRepository : extends
+    JpaRepository <|-- ScholarshipRepository : extends
+    JpaRepository <|-- ApplicationRepository : extends
+    UserRepository ..> User : queries
+    ProfileRepository ..> Profile : queries
+    ScholarshipRepository ..> Scholarship : queries
+    ApplicationRepository ..> Application : queries
+}
+
+package services {
+
+    class UserService {
+        - userRepository: UserRepository
+        + createUser(username: String, password: String): User
+        + authenticate(username: String, password: String): User
+        + getUserById(userId: long): User
+        + deleteUser(userId: long): void
+    }
+
+    class ProfileService {
+        - profileRepository: ProfileRepository
+        + createProfile(profile: Profile): Profile
+        + getProfile(userId: long): Profile
+        + updateProfile(profileId: long, profile: Profile): Profile
+        + deleteProfile(userId: long): void
+    }
+
+    class ScholarshipQueryService {
+        - scholarshipRepository: ScholarshipRepository
+        + getScholarshipById(id: long): Scholarship
+        + searchScholarships(query: String): List<Scholarship>
+        + filterByField(field: String): List<Scholarship>
+        + filterByState(state: String): List<Scholarship>
+    }
+
+    class ScholarshipSyncService {
+        - scholarshipRepository: ScholarshipRepository
+        - externalApiClient: ExternalApiClient
+        + syncFromExternalApi(): List<Scholarship>
+        + refreshScholarships(): void
+    }
+
+    class ApplicationService {
+        - applicationRepository: ApplicationRepository
+        + createApplication(userId: long, scholarshipId: long): Application
+        + updateStatus(applicationId: long, status: ApplicationStatus): Application
+        + validateTransition(from: ApplicationStatus, to: ApplicationStatus): void
+        + getApplications(userId: long): List<Application>
+        + deleteApplication(applicationId: long): void
+    }
+
+    class MatchingService {
+        - profileRepository: ProfileRepository
+        - scholarshipRepository: ScholarshipRepository
+        - promptBuilder: MatchPromptBuilder
+        - aiClient: AIClient
+        + getMatchesForUser(userId: long): List<Scholarship>
+        + refreshMatchesForUser(userId: long): void
+        + rankByDeadlinePriority(matches: List<Scholarship>): List<Scholarship>
+    }
+
+    class MatchPromptBuilder {
+        + buildPrompt(profile: Profile, scholarships: List<Scholarship>): String
+        + parseResponse(response: String): List<Scholarship>
+    }
+
+    class AIClient {
+        - apiKey: String
+        - apiUrl: String
+        - restTemplate: RestTemplate
+        + getCompletion(prompt: String): String
+    }
+
+    UserService --> UserRepository : persists via
+    ProfileService --> ProfileRepository : persists via
+    ScholarshipQueryService --> ScholarshipRepository : reads from
+    ScholarshipSyncService --> ScholarshipRepository : writes to
+    ApplicationService --> ApplicationRepository : persists via
+    MatchingService --> ProfileRepository : reads profile from
+    MatchingService --> ScholarshipRepository : reads scholarships from
+    MatchingService --> MatchPromptBuilder : delegates prompt to
+    MatchingService --> AIClient : requests completion from
+}
+
+package controllers {
+    class UserController {
+        - userService: UserService
+        + register(): ResponseEntity
+        + login(): ResponseEntity
+        + getUser(): ResponseEntity
+        + deleteUser(): ResponseEntity
+    }
+
+    class ProfileController {
+        - profileService: ProfileService
+        + createProfile(): ResponseEntity
+        + getProfile(): ResponseEntity
+        + updateProfile(): ResponseEntity
+        + deleteProfile(): ResponseEntity
+    }
+
+    class ScholarshipController {
+        - scholarshipQueryService: ScholarshipQueryService
+        - scholarshipSyncService: ScholarshipSyncService
+        + getScholarshipById(): ResponseEntity
+        + searchScholarships(): ResponseEntity
+        + syncFromApi(): ResponseEntity
+    }
+
+    class ApplicationController {
+        - applicationService: ApplicationService
+        + createApplication(): ResponseEntity
+        + updateStatus(): ResponseEntity
+        + getApplications(): ResponseEntity
+        + deleteApplication(): ResponseEntity
+    }
+
+    class MatchController {
+        - matchingService: MatchingService
+        + getMatches(): ResponseEntity
+        + refreshMatches(): ResponseEntity
+    }
+
+    UserController --> UserService : delegates to
+    ProfileController --> ProfileService : delegates to
+    ScholarshipController --> ScholarshipQueryService : queries via
+    ScholarshipController --> ScholarshipSyncService : syncs via
+    ApplicationController --> ApplicationService : delegates to
+    MatchController --> MatchingService : delegates to
+}
+
+@enduml
