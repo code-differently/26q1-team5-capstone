@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class scholarshipFinder {
+public class ScholarshipFinder {
 
 	public static void main(String[] args) {
-		SpringApplication.run(scholarshipFinder.class, args);
+		SpringApplication.run(ScholarshipFinder.class, args);
 	}
 
 }
