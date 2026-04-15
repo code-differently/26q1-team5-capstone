@@ -1,0 +1,58 @@
+:root {
+    --navy: #0b3d91;
+    --navy-dark: #001f3f;
+    --accent: #2a6f97;
+    --muted: #f6f9fc
+}
+
+.card.match-card {
+    background: linear-gradient(180deg, var(--muted), #fff);
+    border: 1px solid rgba(11, 61, 145, 0.08);
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 31, 63, 0.06);
+    position: relative
+}
+
+.match-score {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    background: var(--navy);
+    color: #fff;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.85rem
+}
+
+.card.match-card h3 {
+    margin: 0 0 8px;
+    color: var(--navy-dark)
+}
+
+.card.match-card p {
+    margin: 6px 0;
+    color: #163047
+}
+
+.card.match-card button {
+    margin-top: 10px;
+    background: var(--accent);
+    border: none;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer
+}
+
+.card.match-card button:hover {
+    filter: brightness(0.95)
+}
+
+.card.error {
+    background: #ffeef0;
+    color: #611a15;
+    padding: 12px;
+    border-radius: 8px
+}

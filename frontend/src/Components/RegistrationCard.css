@@ -1,0 +1,59 @@
+:root {
+    --navy: #0b3d91;
+    --muted: #f6f9fc;
+    --accent: #2a6f97
+}
+
+.card.registration-card {
+    background: linear-gradient(180deg, var(--muted), #fff);
+    border: 1px solid rgba(11, 61, 145, 0.06);
+    padding: 18px;
+    border-radius: 10px;
+    max-width: 520px
+}
+
+.card.registration-card h3 {
+    margin-top: 0;
+    color: var(--navy)
+}
+
+.form-row {
+    display: flex;
+    gap: 8px
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    flex: 1
+}
+
+.form-group label {
+    margin-bottom: 6px;
+    color: #123
+}
+
+.form-group input {
+    padding: 8px;
+    border: 1px solid #dfeaf4;
+    border-radius: 6px
+}
+
+.register-btn {
+    background: var(--navy);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer
+}
+
+.register-btn:disabled {
+    opacity: 0.7
+}
+
+.error-message {
+    color: #b91c1c;
+    margin: 8px 0
+}

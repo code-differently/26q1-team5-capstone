@@ -1,4 +1,5 @@
 import React from 'react'
+import './ProfileCard.css'
 
 // Maps to Profile entity in UML
 function ProfileCard({ profile, isEditable, onEdit }) {

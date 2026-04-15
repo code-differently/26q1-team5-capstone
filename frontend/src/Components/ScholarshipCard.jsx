@@ -1,4 +1,5 @@
 import React from 'react';
+import './ScholarshipCard.css'
 
 const ScholarshipCard = ({ scholarship, showApplyButton = false }) => {
   if (!scholarship) return <div>No scholarship data</div>;

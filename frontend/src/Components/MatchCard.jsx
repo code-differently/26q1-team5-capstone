@@ -1,4 +1,5 @@
 import React from 'react'
+import './MatchCard.css'
 
 function MatchCard({ scholarship, matchScore }) {
   const { name, amount, deadline, fieldOfStudy } = scholarship
