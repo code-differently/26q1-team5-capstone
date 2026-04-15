@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,10 +16,11 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post('/api/users/login', { username, password });
-      // Assuming the backend returns user data on success
+      // Assuming the backend returns user data on success (including userId)
       console.log('Login successful:', response.data);
-      // TODO: Store user data/token in context or localStorage
-      navigate('/'); // Redirect to home after login
+      // Store user in auth context + localStorage
+      if (response.data) login(response.data);
+      navigate('/profile'); // Redirect to profile after login
     } catch (err) {
       setError('Login failed. Please check your credentials.');
       console.error('Login error:', err);

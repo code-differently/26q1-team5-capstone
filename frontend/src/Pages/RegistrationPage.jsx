@@ -1,11 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import RegistrationCard from '../Components/RegistrationCard';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const RegistrationPage = () => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
   const handleRegistrationSuccess = (userData) => {
     console.log('User registered successfully:', userData);
-    // Could show a success message or redirect with a message
+    if (userData) {
+      login(userData);
+      navigate('/profile');
+    }
   };
 
   return (
