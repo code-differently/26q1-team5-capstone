@@ -8,6 +8,7 @@ import ScholarshipCard from './Components/ScholarshipCard'
 import Navbar from './Components/Navbar'
 import HomePage from './Pages/HomePage'
 import LoginPage from './Pages/LoginPage'
+import RegistrationPage from './Pages/RegistrationPage'
 import MatchesPage from './Pages/MatchesPage'
 import ScholarshipPage from './Pages/ScholarshipPage'
 import ApplicationPage from './Pages/ApplicationPage'
@@ -15,6 +16,8 @@ import ProfilePage from './Pages/ProfilePage'
 
 
 function App() {
+
+  
 
   // Mock data - replace with API calls to MatchingService & ApplicationService
   const [matches] = useState([
@@ -110,6 +113,7 @@ function App() {
           />
         } />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegistrationPage />} />
         <Route path="/matches" element={<MatchesPage />} />
         <Route path="/scholarships" element={<ScholarshipPage />} />
         <Route path="/applications" element={<ApplicationPage />} />
