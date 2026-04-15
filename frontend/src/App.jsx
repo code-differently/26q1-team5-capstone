@@ -1,12 +1,13 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { Routes, Route } from 'react-router-dom'
 import './App.css'
 import ApplicationCard from './Components/ApplicationCard'
 import MatchCard from './Components/MatchCard'
 import ProfileCard from './Components/ProfileCard'
+import ScholarshipCard from './Components/ScholarshipCard'
 import Navbar from './Components/Navbar'
+import LoginPage from './Pages/LoginPage'
+import MatchesPage from './Pages/MatchesPage'
 
 
 function App() {
@@ -102,56 +103,63 @@ function App() {
   return (
     <>
       <Navbar />
-      
-      <h1>Scholarship Tracker</h1>
+      <Routes>
+        <Route path="/" element={
+          <>
+            <h1>Scholarship Tracker</h1>
 
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
+            <div className="card">
+              <button onClick={() => setCount((count) => count + 1)}>
+                count is {count}
+              </button>
+              <p>
+                Edit <code>src/App.jsx</code> and save to test HMR
+              </p>
+            </div>
 
-      <ProfileCard profile={profile} isEditable onEdit={() => alert('Edit profile')} />
+            <ProfileCard profile={profile} isEditable onEdit={() => alert('Edit profile')} />
 
-      <main className="dashboard">
-        <section className="matches-section">
-          <h2>Recommended For You</h2>
-          <div className="card-grid">
-            {matches.length > 0? (
-              matches.map(match => (
-                <MatchCard
-                  key={match.scholarship.scholarshipId}
-                  scholarship={match.scholarship}
-                  matchScore={match.matchScore}
-                />
-              ))
-            ) : (
-              <p className="empty-state">No matches yet. Complete your profile to get recommendations.</p>
-            )}
-          </div>
-        </section>
+            <main className="dashboard">
+              <section className="matches-section">
+                <h2>Recommended For You</h2>
+                <div className="card-grid">
+                  {matches.length > 0? (
+                    matches.map(match => (
+                      <MatchCard
+                        key={match.scholarship.scholarshipId}
+                        scholarship={match.scholarship}
+                        matchScore={match.matchScore}
+                      />
+                    ))
+                  ) : (
+                    <p className="empty-state">No matches yet. Complete your profile to get recommendations.</p>
+                  )}
+                </div>
+              </section>
 
-        <section className="applications-section">
-          <h2>Your Applications</h2>
-          <div className="card-grid">
-            {applications.length > 0? (
-              applications.map(app => (
-                <ApplicationCard
-                  key={app.applicationId}
-                  application={app}
-                  onEdit={handleEdit}
-                  onDelete={handleDelete}
-                />
-              ))
-            ) : (
-              <p className="empty-state">You haven't saved any applications yet.</p>
-            )}
-          </div>
-        </section>
-      </main>
+              <section className="applications-section">
+                <h2>Your Applications</h2>
+                <div className="card-grid">
+                  {applications.length > 0? (
+                    applications.map(app => (
+                      <ApplicationCard
+                        key={app.applicationId}
+                        application={app}
+                        onEdit={handleEdit}
+                        onDelete={handleDelete}
+                      />
+                    ))
+                  ) : (
+                    <p className="empty-state">You haven't saved any applications yet.</p>
+                  )}
+                </div>
+              </section>
+            </main>
+          </>
+        } />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/matches" element={<MatchesPage />} />
+      </Routes>
     </>
   )
 }
