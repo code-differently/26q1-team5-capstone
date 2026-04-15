@@ -5,6 +5,9 @@ import heroImg from './assets/hero.png'
 import './App.css'
 import ApplicationCard from './Components/ApplicationCard'
 import MatchCard from './Components/MatchCard'
+import ProfileCard from './Components/ProfileCard'
+import Navbar from './Components/Navbar'
+
 
 function App() {
   const [count, setCount] = useState(0)
@@ -73,6 +76,18 @@ function App() {
     }
   ])
 
+  const [profile] = useState({
+    name: 'Jordan Lee',
+    gpa: 3.8,
+    major: 'Computer Science',
+    enrollmentStatus: 'Full-time',
+    needsFinancialAid: true,
+    state: 'CA',
+    ethnicity: 'Asian',
+    careerGoals: 'Software engineering',
+    interests: 'AI, robotics, volunteer work'
+  })
+
   const handleEdit = (applicationId) => {
     console.log("Edit application:", applicationId)
     // TODO: Open edit modal or navigate to /applications/${applicationId}/edit
@@ -86,6 +101,7 @@ function App() {
 
   return (
     <>
+      <Navbar />
       
       <h1>Scholarship Tracker</h1>
 
@@ -97,6 +113,8 @@ function App() {
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
       </div>
+
+      <ProfileCard profile={profile} isEditable onEdit={() => alert('Edit profile')} />
 
       <main className="dashboard">
         <section className="matches-section">
