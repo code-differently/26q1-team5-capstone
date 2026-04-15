@@ -1,0 +1,42 @@
+:root {
+    --navy: #0b3d91;
+    --accent: #2a6f97;
+    --muted: #f7fbfd
+}
+
+.card.scholarship-card {
+    background: #fff;
+    border: 1px solid rgba(11, 61, 145, 0.06);
+    padding: 16px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(2, 18, 37, 0.03)
+}
+
+.card.scholarship-card h3 {
+    margin: 0 0 8px;
+    color: var(--navy)
+}
+
+.card.scholarship-card p {
+    margin: 6px 0;
+    color: #163047
+}
+
+.card.scholarship-card ul {
+    margin: 6px 0 0 18px;
+    color: #163047
+}
+
+.apply-btn {
+    margin-top: 10px;
+    background: var(--navy);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer
+}
+
+.apply-btn:hover {
+    background: #08306b
+}

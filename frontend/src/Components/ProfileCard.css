@@ -1,0 +1,47 @@
+:root {
+    --navy: #0b3d91;
+    --muty: #f6f9fc;
+    --accent: #2a6f97
+}
+
+.card.profile-card {
+    background: #fff;
+    border: 1px solid rgba(11, 61, 145, 0.06);
+    padding: 16px;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(1, 22, 40, 0.04)
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px
+}
+
+.card-header h3 {
+    margin: 0;
+    color: var(--navy)
+}
+
+.card-header button {
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer
+}
+
+.card-body p {
+    margin: 6px 0;
+    color: #163047
+}
+
+.card-body strong {
+    color: #0b3d91
+}
+
+.profile-card .financial {
+    font-weight: 600
+}

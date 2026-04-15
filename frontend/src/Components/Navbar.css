@@ -1,0 +1,129 @@
+:root {
+    --navy: #0b3d91;
+    --navy-dark: #001f3f;
+    --muted: #f6f9fc
+}
+
+.navbar {
+    background: linear-gradient(90deg, var(--navy), var(--navy-dark));
+    color: #fff;
+    padding: 10px 0;
+    position: relative
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 16px
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #fff;
+    text-decoration: none
+}
+
+.nav-logo-img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain
+}
+
+.hamburger {
+    display: none;
+    cursor: pointer
+}
+
+.hamburger .bar {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #fff;
+    margin: 4px 0;
+    transition: transform .2s
+}
+
+.nav-links {
+    display: flex;
+    gap: 16px;
+    align-items: center
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    padding: 8px;
+    border-radius: 6px
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    padding: 8px;
+    border-radius: 6px
+}
+
+.nav-links a:hover {
+    background: rgba(255, 255, 255, 0.06)
+}
+
+.nav-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.25)
+}
+
+.auth-links {
+    display: flex;
+    gap: 10px;
+    align-items: center
+}
+
+.nav-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer
+}
+
+.register-link {
+    background: rgba(255, 255, 255, 0.06);
+    padding: 6px 10px;
+    border-radius: 6px
+}
+
+@media(max-width:800px) {
+    .hamburger {
+        display: block
+    }
+
+    .nav-links {
+        position: fixed;
+        right: 0;
+        top: 0;
+        height: 100vh;
+        width: 260px;
+        background: linear-gradient(180deg, #08254f, #06203d);
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 56px 16px;
+        transform: translateX(100%);
+        transition: transform .25s
+    }
+
+    .nav-links.active {
+        transform: translateX(0)
+    }
+
+    .nav-links a {
+        width: 100%;
+        padding: 12px 8px
+    }
+}

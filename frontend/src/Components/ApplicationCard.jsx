@@ -1,4 +1,5 @@
 import React from 'react'
+import './ApplicationCard.css'
 
 function ApplicationCard({ application, onEdit, onDelete }) {
   // onEdit and onDelete are the functions being called when "Edit" and "Delete" buttons are clicked.
