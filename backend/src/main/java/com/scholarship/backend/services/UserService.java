@@ -3,19 +3,16 @@ package com.scholarship.backend.services;
 import com.scholarship.backend.entities.User;
 import com.scholarship.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     public User createUser(String username, String password) {
@@ -24,20 +21,21 @@ public class UserService {
             throw new IllegalArgumentException("Username already exists: " + username);
         }
 
-        // Hash the password
-        String hashedPassword = passwordEncoder.encode(password);
+        // TEMP: store password as-is (no hashing for now)
+        User user = new User(username, password, "STUDENT");
 
-        // Create new user
-        User user = new User(username, hashedPassword, "STUDENT");
         return userRepository.save(user);
     }
 
     public User authenticate(String username, String password) {
         User user = userRepository.findByUsername(username);
-        if (user != null && passwordEncoder.matches(password, user.getPasswordHash())) {
+
+        // TEMP: plain text comparison
+        if (user != null && user.getPasswordHash().equals(password)) {
             return user;
         }
-        return null; // Authentication failed
+
+        return null;
     }
 
     public User getUserById(long userId) {
