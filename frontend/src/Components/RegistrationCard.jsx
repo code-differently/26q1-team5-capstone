@@ -6,11 +6,8 @@ import './RegistrationCard.css';
 const RegistrationCard = ({ onSuccess, redirectTo = '/login' }) => {
   const [formData, setFormData] = useState({
     username: '',
-    email: '',
     password: '',
-    confirmPassword: '',
-    firstName: '',
-    lastName: ''
+    confirmPassword: ''
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -44,10 +41,7 @@ const RegistrationCard = ({ onSuccess, redirectTo = '/login' }) => {
     try {
       const registrationData = {
         username: formData.username,
-        email: formData.email,
-        password: formData.password,
-        firstName: formData.firstName,
-        lastName: formData.lastName
+        password: formData.password
       };
 
       const response = await axios.post('/api/users/register', registrationData);
@@ -73,30 +67,6 @@ const RegistrationCard = ({ onSuccess, redirectTo = '/login' }) => {
     <div className="card registration-card">
       <h3>Create Account</h3>
       <form onSubmit={handleSubmit}>
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="firstName">First Name:</label>
-            <input
-              type="text"
-              id="firstName"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="lastName">Last Name:</label>
-            <input
-              type="text"
-              id="lastName"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        </div>
 
         <div className="form-group">
           <label htmlFor="username">Username:</label>
@@ -105,18 +75,6 @@ const RegistrationCard = ({ onSuccess, redirectTo = '/login' }) => {
             id="username"
             name="username"
             value={formData.username}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
             onChange={handleChange}
             required
           />
