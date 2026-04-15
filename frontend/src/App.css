@@ -9,7 +9,12 @@
   --social-bg: rgba(11, 61, 145, 0.06);
   --shadow: 0 4px 14px rgba(11, 61, 145, 0.08);
 }
-
+body{
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #d4dfeb;
+  color: #333
+}
 .counter {
   font-size: 16px;
   padding: 5px 10px;
