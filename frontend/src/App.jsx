@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
+import { AuthProvider } from './context/AuthContext'
 import './App.css'
 import ApplicationCard from './Components/ApplicationCard'
 import MatchCard from './Components/MatchCard'
@@ -101,7 +102,7 @@ function App() {
   }
 
   return (
-    <>
+    <AuthProvider>
       <Navbar />
       <Routes>
         <Route path="/" element={
@@ -119,7 +120,7 @@ function App() {
         <Route path="/applications" element={<ApplicationPage />} />
         <Route path="/profile" element={<ProfilePage />} />
       </Routes>
-    </>
+    </AuthProvider>
   )
 }
 

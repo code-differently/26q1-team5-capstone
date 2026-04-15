@@ -1,51 +1,89 @@
 import React, { useState, useEffect } from 'react';
 import ProfileCard from '../Components/ProfileCard';
+import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 const ProfilePage = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [editedProfile, setEditedProfile] = useState({});
-
-  // Mock data - replace with API call to UserController
-  const mockProfile = {
-    userId: 1,
-    name: 'Jordan Lee',
-    email: 'jordan.lee@university.edu',
-    gpa: 3.8,
-    major: 'Computer Science',
-    enrollmentStatus: 'Full-time',
-    graduationYear: 2027,
-    needsFinancialAid: true,
-    state: 'CA',
-    ethnicity: 'Asian',
-    gender: 'Non-binary',
-    careerGoals: 'Software engineering at a tech company',
-    interests: 'AI, robotics, volunteer work',
-    extracurriculars: 'Computer Science Club, Hackathon organizer',
-    workExperience: 'Intern at TechCorp (Summer 2025)',
-    awards: 'Deans List (2024, 2025)',
-    challenges: 'First-generation college student'
-  };
+  const { user } = useAuth();
 
   useEffect(() => {
-    // TODO: Replace with API call: axios.get('/api/users/profile')
-    setTimeout(() => {
-      setProfile(mockProfile);
-      setEditedProfile(mockProfile);
+    if (!user) {
       setLoading(false);
-    }, 500);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+      return;
+    }
+
+    const apiBase = import.meta.env.VITE_API_URL ?? '';
+    const endpoint = apiBase ? `${apiBase}/api/profiles/${user.userId}` : `/api/profiles/${user.userId}`;
+
+    const fetchProfile = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get(endpoint);
+        if (res && res.data) {
+          setProfile(res.data);
+          setEditedProfile(res.data);
+        } else {
+          setProfile(null);
+          setEditedProfile({});
+        }
+      } catch (err) {
+        // If 404 or no profile, treat as no profile
+        console.warn('No profile found or fetch error', err);
+        setProfile(null);
+        setEditedProfile({});
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleEdit = () => {
     setIsEditing(true);
   };
 
   const handleSave = () => {
-    // TODO: API call: axios.put('/api/users/profile', editedProfile)
-    setProfile(editedProfile);
-    setIsEditing(false);
-    alert('Profile updated successfully!');
+    const apiBase = import.meta.env.VITE_API_URL ?? '';
+
+    const save = async () => {
+      try {
+        setLoading(true);
+        if (!profile) {
+          // create profile: backend expects Profile with nested user.userId
+          const endpoint = apiBase ? `${apiBase}/api/profiles` : `/api/profiles`;
+          const payload = {
+            ...editedProfile,
+            user: { userId: user.userId }
+          };
+          const res = await axios.post(endpoint, payload);
+          setProfile(res.data);
+          setEditedProfile(res.data);
+          setIsEditing(false);
+          alert('Profile created successfully!');
+        } else {
+          // update profile
+          const endpoint = apiBase ? `${apiBase}/api/profiles/${profile.profileId}` : `/api/profiles/${profile.profileId}`;
+          const payload = { ...editedProfile };
+          const res = await axios.put(endpoint, payload);
+          setProfile(res.data);
+          setEditedProfile(res.data);
+          setIsEditing(false);
+          alert('Profile updated successfully!');
+        }
+      } catch (err) {
+        console.error('Save profile error', err);
+        alert('Failed to save profile.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    save();
   };
 
   const handleCancel = () => {

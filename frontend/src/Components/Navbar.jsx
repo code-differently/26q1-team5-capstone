@@ -2,10 +2,11 @@ import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import logoImg from '../assets/logo.png'
 import './Navbar.css'
+import { useAuth } from '../context/AuthContext'
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const [isLoggedIn, setIsLoggedIn] = useState(false) // TODO: Replace with auth context
+  const { user, logout } = useAuth()
   const navRef = useRef(null)
   const navigate = useNavigate()
 
@@ -14,7 +15,7 @@ function Navbar() {
 
   const handleLogout = () => {
     // TODO: Call UserController logout + clear token
-    setIsLoggedIn(false)
+    logout()
     closeMenu()
     navigate('/login')
   }
@@ -49,8 +50,11 @@ function Navbar() {
           <Link to="/matches" onClick={closeMenu}>Matches</Link>
           <Link to="/applications" onClick={closeMenu}>My Applications</Link>
           <Link to="/profile" onClick={closeMenu}>Profile</Link>
-          {isLoggedIn? (
-            <button onClick={handleLogout} className="nav-btn">Logout</button>
+          {user ? (
+            <>
+              <span className="nav-user">{user.username}</span>
+              <button onClick={handleLogout} className="nav-btn">Logout</button>
+            </>
           ) : (
             <div className="auth-links">
               <Link to="/login" onClick={closeMenu}>Login</Link>
