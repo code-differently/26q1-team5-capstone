@@ -6,12 +6,15 @@ import MatchCard from './Components/MatchCard'
 import ProfileCard from './Components/ProfileCard'
 import ScholarshipCard from './Components/ScholarshipCard'
 import Navbar from './Components/Navbar'
+import HomePage from './Pages/HomePage'
 import LoginPage from './Pages/LoginPage'
 import MatchesPage from './Pages/MatchesPage'
+import ScholarshipPage from './Pages/ScholarshipPage'
+import ApplicationPage from './Pages/ApplicationPage'
+import ProfilePage from './Pages/ProfilePage'
 
 
 function App() {
-  const [count, setCount] = useState(0)
 
   // Mock data - replace with API calls to MatchingService & ApplicationService
   const [matches] = useState([
@@ -89,12 +92,6 @@ function App() {
     interests: 'AI, robotics, volunteer work'
   })
 
-  const handleEdit = (applicationId) => {
-    console.log("Edit application:", applicationId)
-    // TODO: Open edit modal or navigate to /applications/${applicationId}/edit
-    alert(`Editing application ${applicationId}`)
-  }
-
   const handleDelete = (applicationId) => {
     console.log("Delete application:", applicationId)
     setApplications(applications.filter(app => app.applicationId!== applicationId))
@@ -105,60 +102,18 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={
-          <>
-            <h1>Scholarship Tracker</h1>
-
-            <div className="card">
-              <button onClick={() => setCount((count) => count + 1)}>
-                count is {count}
-              </button>
-              <p>
-                Edit <code>src/App.jsx</code> and save to test HMR
-              </p>
-            </div>
-
-            <ProfileCard profile={profile} isEditable onEdit={() => alert('Edit profile')} />
-
-            <main className="dashboard">
-              <section className="matches-section">
-                <h2>Recommended For You</h2>
-                <div className="card-grid">
-                  {matches.length > 0? (
-                    matches.map(match => (
-                      <MatchCard
-                        key={match.scholarship.scholarshipId}
-                        scholarship={match.scholarship}
-                        matchScore={match.matchScore}
-                      />
-                    ))
-                  ) : (
-                    <p className="empty-state">No matches yet. Complete your profile to get recommendations.</p>
-                  )}
-                </div>
-              </section>
-
-              <section className="applications-section">
-                <h2>Your Applications</h2>
-                <div className="card-grid">
-                  {applications.length > 0? (
-                    applications.map(app => (
-                      <ApplicationCard
-                        key={app.applicationId}
-                        application={app}
-                        onEdit={handleEdit}
-                        onDelete={handleDelete}
-                      />
-                    ))
-                  ) : (
-                    <p className="empty-state">You haven't saved any applications yet.</p>
-                  )}
-                </div>
-              </section>
-            </main>
-          </>
+          <HomePage
+            matches={matches}
+            applications={applications}
+            profile={profile}
+            onDeleteApplication={handleDelete}
+          />
         } />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/matches" element={<MatchesPage />} />
+        <Route path="/scholarships" element={<ScholarshipPage />} />
+        <Route path="/applications" element={<ApplicationPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </>
   )
