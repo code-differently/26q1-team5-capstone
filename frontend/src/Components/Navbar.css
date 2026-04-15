@@ -4,12 +4,15 @@
     --muted: #f6f9fc
 }
 
-.navbar {
-    background: linear-gradient(90deg, var(--navy), var(--navy-dark));
-    color: #fff;
-    padding: 10px 0;
-    position: relative
+
+    .navbar {
+/* lighter, slightly translucent navy so logos/images remain visible */
+background: linear-gradient(90deg, rgba(137, 174, 239, 0.95), rgba(11,61,145,0.80));
+color: #fff;
+padding: 10px 0;
+position: relative;
 }
+
 
 .nav-container {
     display: flex;
@@ -30,8 +33,11 @@
 
 .nav-logo-img {
     width: 40px;
-    height: 40px;
-    object-fit: contain
+height: 40px;
+object-fit: contain;
+/* help the logo stand out on darker backgrounds */
+filter: brightness(1.12) saturate(1.05);
+z-index: 3;
 }
 
 .hamburger {
@@ -106,16 +112,17 @@
 
     .nav-links {
         position: fixed;
-        right: 0;
-        top: 0;
-        height: 100vh;
-        width: 260px;
-        background: linear-gradient(180deg, #08254f, #06203d);
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 56px 16px;
-        transform: translateX(100%);
-        transition: transform .25s
+right: 0;
+top: 0;
+height: 100vh;
+width: 260px;
+/* use a cooler, readable gradient for the slide-out menu */
+background: linear-gradient(180deg, rgba(8,48,107,0.98), rgba(6,32,61,0.98));
+flex-direction: column;
+align-items: flex-start;
+padding: 56px 16px;
+transform: translateX(100%);
+transition: transform .25s;
     }
 
     .nav-links.active {
