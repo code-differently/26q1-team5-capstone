@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import logoImg from '../assets/logo.png'
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -31,6 +32,7 @@ function Navbar() {
     <nav className="navbar" ref={navRef}>
       <div className="nav-container">
         <Link to="/" className="nav-logo" onClick={closeMenu}>
+          <img src={logoImg} alt="Scholarship Finder logo" className="nav-logo-img" />
           <h2>Scholarship Finder</h2>
         </Link>
 
@@ -49,7 +51,10 @@ function Navbar() {
           {isLoggedIn? (
             <button onClick={handleLogout} className="nav-btn">Logout</button>
           ) : (
-            <Link to="/login" onClick={closeMenu}>Login</Link>
+            <div className="auth-links">
+              <Link to="/login" onClick={closeMenu}>Login</Link>
+              <Link to="/register" onClick={closeMenu} className="register-link">Register</Link>
+            </div>
           )}
         </div>
       </div>
