@@ -32,7 +32,7 @@ const ScholarshipCard = ({ scholarship, showApplyButton = false }) => {
     <div className="card scholarship-card">
       <h3>{name}</h3>
       {description && <p><strong>Description:</strong> {description}</p>}
-      <p><strong>Amount:</strong> ${amount?.toLocaleString()}</p>
+      <p><strong>Amount:</strong> {amount ? `$${amount.toLocaleString()}` : 'Not available'}</p>
       <p><strong>Deadline:</strong> {formatDate(deadline)}</p>
       <p><strong>Field of Study:</strong> {fieldOfStudy}</p>
       {state && <p><strong>State:</strong> {state}</p>}
