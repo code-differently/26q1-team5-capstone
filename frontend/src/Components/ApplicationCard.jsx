@@ -1,8 +1,8 @@
 import React from 'react'
 import './ApplicationCard.css'
 
-function ApplicationCard({ application, onEdit, onDelete }) {
-  // onEdit and onDelete are the functions being called when "Edit" and "Delete" buttons are clicked.
+function ApplicationCard({ application, onDelete }) {
+  // onDelete is the function being called when "Delete" button is clicked.
   const { applicationId, scholarship, status, savedDate, submittedDate, deadlineAlert, notes } = application
   // Fields like scholarship name, status, saved date, submitted date, deadline alert, and notes are being extracted from the application object for display in the card.
   const formatDate = (dateString) => {
@@ -39,7 +39,6 @@ function ApplicationCard({ application, onEdit, onDelete }) {
         {notes && <p><strong>Notes:</strong> {notes}</p>}
       </div>
       <div className="card-actions">
-        <button className="btn-edit" onClick={() => onEdit(applicationId)}>Edit</button>
         <button className="btn-delete" onClick={() => onDelete(applicationId)}>Delete</button>
       </div>
     </div>

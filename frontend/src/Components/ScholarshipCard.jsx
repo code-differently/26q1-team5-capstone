@@ -1,7 +1,10 @@
 import React from 'react';
+import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 import './ScholarshipCard.css'
 
 const ScholarshipCard = ({ scholarship, showApplyButton = false }) => {
+  const { user } = useAuth();
   if (!scholarship) return <div>No scholarship data</div>;
 
   const {
@@ -23,16 +26,29 @@ const ScholarshipCard = ({ scholarship, showApplyButton = false }) => {
     return new Date(dateString).toLocaleDateString();
   };
 
-  const handleApply = () => {
-    // TODO: Navigate to application form or open modal
-    alert(`Applying for ${name}`);
+  const handleApply = async () => {
+    if (!user?.userId) {
+      alert('Please log in to apply for scholarships');
+      return;
+    }
+    try {
+      await axios.post('/api/applications', {
+        userId: user.userId,
+        scholarshipId: scholarship.scholarshipId
+      });
+      alert(`Application saved for ${name}! Check your applications page to track progress.`);
+    } catch (error) {
+      console.error('Error creating application:', error);
+      const serverMessage = error.response?.data?.message || error.response?.data || error.message;
+      alert(`Failed to save application. ${serverMessage}`);
+    }
   };
 
   return (
     <div className="card scholarship-card">
       <h3>{name}</h3>
       {description && <p><strong>Description:</strong> {description}</p>}
-      <p><strong>Amount:</strong> {amount ? `$${amount.toLocaleString()}` : 'Not available'}</p>
+      <p><strong>Amount:</strong> {amount ? `$${amount.toLocaleString()}` : 'Amount not specified'}</p>
       <p><strong>Deadline:</strong> {formatDate(deadline)}</p>
       <p><strong>Field of Study:</strong> {fieldOfStudy}</p>
       {state && <p><strong>State:</strong> {state}</p>}

@@ -25,11 +25,22 @@ public class ScholarshipSyncService {
         List<Scholarship> toSave = new ArrayList<>();
 
         for (Scholarship scholarship : incoming) {
-            // Deduplicate by name + sourceApi — avoids duplicate rows on repeated syncs
-            boolean alreadyExists = scholarshipRepository
-                .existsByNameAndSourceApi(scholarship.getName(), scholarship.getSourceApi());
+            // Check if scholarship already exists
+            Scholarship existing = scholarshipRepository
+                .findByNameAndSourceApi(scholarship.getName(), scholarship.getSourceApi());
 
-            if (!alreadyExists) {
+            if (existing != null) {
+                // Update existing scholarship with new information (especially amount)
+                existing.setAmount(scholarship.getAmount());
+                existing.setDescription(scholarship.getDescription());
+                existing.setDeadline(scholarship.getDeadline());
+                existing.setEligibilityCriteria(scholarship.getEligibilityCriteria());
+                existing.setApplicationUrl(scholarship.getApplicationUrl());
+                existing.setFieldOfStudy(scholarship.getFieldOfStudy());
+                existing.setState(scholarship.getState());
+                toSave.add(existing);
+            } else {
+                // New scholarship
                 toSave.add(scholarship);
             }
         }
