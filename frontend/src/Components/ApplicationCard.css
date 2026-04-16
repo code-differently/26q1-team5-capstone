@@ -1,0 +1,76 @@
+:root {
+    --navy: #0b3d91;
+    --green: #22c55e;
+    --blue: #3b82f6;
+    --muted: #f8fbff
+}
+
+.card {
+    background: #fff;
+    border: 1px solid rgba(11, 61, 145, 0.06);
+    padding: 14px;
+    border-radius: 8px
+}
+
+.card h3 {
+    margin: 0 0 8px;
+    color: var(--navy)
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 999px;
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 8px
+}
+
+.status-badge[style*="SAVED"] {
+    background: #64748b
+}
+
+.status-badge[style*="IN_PROGRESS"] {
+    background: var(--blue)
+}
+
+.status-badge[style*="SUBMITTED"] {
+    background: var(--green)
+}
+
+.status-badge[style*="AWARDED"] {
+    background: #eab308
+}
+
+.status-badge[style*="REJECTED"] {
+    background: #ef4444
+}
+
+.card-details p {
+    margin: 6px 0;
+    color: #163047
+}
+
+.card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px
+}
+
+.btn-edit {
+    background: transparent;
+    border: 1px solid var(--navy);
+    color: var(--navy);
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer
+}
+
+.btn-delete {
+    background: #ef4444;
+    border: none;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer
+}
