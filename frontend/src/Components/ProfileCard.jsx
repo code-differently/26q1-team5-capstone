@@ -5,7 +5,7 @@ import './ProfileCard.css'
 function ProfileCard({ profile, isEditable, onEdit }) {
   if (!profile) return <div>No profile data</div>
 
-  const { name, gpa, major, enrollmentStatus, needsFinancialAid, state, ethnicity, careerGoals, interests } = profile
+  const { name, gpa, major, enrollmentStatus, needsFinancialAid, state, ethnicity, careerGoals, interests } = profile || {};
 
   return (
     <div className="card profile-card">
@@ -14,14 +14,14 @@ function ProfileCard({ profile, isEditable, onEdit }) {
         {isEditable && <button onClick={onEdit}>Edit</button>}
       </div>
       <div className="card-body">
-        <p><strong>GPA:</strong> {gpa}</p>
-        <p><strong>Major:</strong> {major}</p>
-        <p><strong>Status:</strong> {enrollmentStatus}</p>
-        <p><strong>State:</strong> {state}</p>
-        <p><strong>Ethnicity:</strong> {ethnicity}</p>
-        <p><strong>Financial Aid Needed:</strong> {needsFinancialAid? 'Yes' : 'No'}</p>
-        <p><strong>Career Goals:</strong> {careerGoals}</p>
-        <p><strong>Interests:</strong> {interests}</p>
+        <p><strong>GPA:</strong> {gpa ?? '—'}</p>
+        <p><strong>Major:</strong> {major || '—'}</p>
+        <p><strong>Status:</strong> {enrollmentStatus || '—'}</p>
+        <p><strong>State:</strong> {state || '—'}</p>
+        <p><strong>Ethnicity:</strong> {ethnicity || '—'}</p>
+        <p><strong>Financial Aid Needed:</strong> {needsFinancialAid == null ? '—' : (needsFinancialAid ? 'Yes' : 'No')}</p>
+        <p><strong>Career Goals:</strong> {careerGoals || '—'}</p>
+        <p><strong>Interests:</strong> {interests || '—'}</p>
       </div>
     </div>
   )

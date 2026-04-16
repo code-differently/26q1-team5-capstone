@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ProfileCard from '../Components/ProfileCard';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
@@ -9,7 +10,7 @@ const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedProfile, setEditedProfile] = useState({});
   const { user } = useAuth();
-
+  
   useEffect(() => {
     if (!user) {
       setLoading(false);
@@ -23,6 +24,7 @@ const ProfilePage = () => {
       try {
         setLoading(true);
         const res = await axios.get(endpoint);
+        console.debug('Fetched profile response:', res && res.data);
         if (res && res.data) {
           setProfile(res.data);
           setEditedProfile(res.data);
@@ -47,6 +49,23 @@ const ProfilePage = () => {
     setIsEditing(true);
   };
 
+  const handleCreateClick = () => {
+    // Prefill editedProfile with some sensible defaults (username -> name)
+    const initial = {
+      name: user?.username || '',
+      gpa: null,
+      major: '',
+      enrollmentStatus: 'Full-time',
+      needsFinancialAid: false,
+      state: '',
+      ethnicity: '',
+      careerGoals: '',
+      interests: ''
+    };
+    setEditedProfile(initial);
+    setIsEditing(true);
+  };
+
   const handleSave = () => {
     const apiBase = import.meta.env.VITE_API_URL ?? '';
 
@@ -57,21 +76,55 @@ const ProfilePage = () => {
           // create profile: backend expects Profile with nested user.userId
           const endpoint = apiBase ? `${apiBase}/api/profiles` : `/api/profiles`;
           const payload = {
-            ...editedProfile,
-            user: { userId: user.userId }
+            user: { userId: user.userId },
+            name: editedProfile.name,
+            gpa: editedProfile.gpa,
+            major: editedProfile.major,
+            enrollmentStatus: editedProfile.enrollmentStatus,
+            needsFinancialAid: editedProfile.needsFinancialAid,
+            state: editedProfile.state,
+            ethnicity: editedProfile.ethnicity,
+            careerGoals: editedProfile.careerGoals,
+            interests: editedProfile.interests
           };
           const res = await axios.post(endpoint, payload);
-          setProfile(res.data);
-          setEditedProfile(res.data);
+          console.debug('Create profile response:', res && res.data);
+          if (res && res.data) {
+            setProfile(res.data);
+            setEditedProfile(res.data);
+          } else {
+            // fallback: refetch created profile for user
+            const fetchRes = await axios.get(apiBase ? `${apiBase}/api/profiles/${user.userId}` : `/api/profiles/${user.userId}`);
+            setProfile(fetchRes.data);
+            setEditedProfile(fetchRes.data);
+          }
           setIsEditing(false);
           alert('Profile created successfully!');
         } else {
           // update profile
           const endpoint = apiBase ? `${apiBase}/api/profiles/${profile.profileId}` : `/api/profiles/${profile.profileId}`;
-          const payload = { ...editedProfile };
+          const payload = {
+            name: editedProfile.name,
+            gpa: editedProfile.gpa,
+            major: editedProfile.major,
+            enrollmentStatus: editedProfile.enrollmentStatus,
+            needsFinancialAid: editedProfile.needsFinancialAid,
+            state: editedProfile.state,
+            ethnicity: editedProfile.ethnicity,
+            careerGoals: editedProfile.careerGoals,
+            interests: editedProfile.interests
+          };
           const res = await axios.put(endpoint, payload);
-          setProfile(res.data);
-          setEditedProfile(res.data);
+          console.debug('Update profile response:', res && res.data);
+          if (res && res.data) {
+            setProfile(res.data);
+            setEditedProfile(res.data);
+          } else {
+            // fallback: refetch profile to ensure UI shows latest data
+            const fetchRes = await axios.get(apiBase ? `${apiBase}/api/profiles/${user.userId}` : `/api/profiles/${user.userId}`);
+            setProfile(fetchRes.data);
+            setEditedProfile(fetchRes.data);
+          }
           setIsEditing(false);
           alert('Profile updated successfully!');
         }
@@ -87,7 +140,7 @@ const ProfilePage = () => {
   };
 
   const handleCancel = () => {
-    setEditedProfile(profile);
+    setEditedProfile(profile || {});
     setIsEditing(false);
   };
 
@@ -112,7 +165,7 @@ const ProfilePage = () => {
 
       {isEditing ? (
         <div className="profile-edit-form">
-          <h2>Edit Profile</h2>
+          <h2>{profile ? 'Edit Profile' : 'Create Profile'}</h2>
           <div className="form-grid">
             <div className="form-group">
               <label>Name:</label>
@@ -124,15 +177,6 @@ const ProfilePage = () => {
             </div>
 
             <div className="form-group">
-              <label>Email:</label>
-              <input
-                type="email"
-                value={editedProfile.email || ''}
-                onChange={(e) => handleProfileChange('email', e.target.value)}
-              />
-            </div>
-
-            <div className="form-group">
               <label>GPA:</label>
               <input
                 type="number"
@@ -140,7 +184,19 @@ const ProfilePage = () => {
                 min="0"
                 max="4.0"
                 value={editedProfile.gpa || ''}
-                onChange={(e) => handleProfileChange('gpa', parseFloat(e.target.value))}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  handleProfileChange('gpa', val === '' ? null : parseFloat(val));
+                }}
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Ethnicity:</label>
+              <input
+                type="text"
+                value={editedProfile.ethnicity || ''}
+                onChange={(e) => handleProfileChange('ethnicity', e.target.value)}
               />
             </div>
 
@@ -165,14 +221,6 @@ const ProfilePage = () => {
               </select>
             </div>
 
-            <div className="form-group">
-              <label>Graduation Year:</label>
-              <input
-                type="number"
-                value={editedProfile.graduationYear || ''}
-                onChange={(e) => handleProfileChange('graduationYear', parseInt(e.target.value))}
-              />
-            </div>
 
             <div className="form-group">
               <label>State:</label>
@@ -201,41 +249,7 @@ const ProfilePage = () => {
               />
             </div>
 
-            <div className="form-group">
-              <label>Extracurriculars:</label>
-              <textarea
-                value={editedProfile.extracurriculars || ''}
-                onChange={(e) => handleProfileChange('extracurriculars', e.target.value)}
-                rows="2"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Work Experience:</label>
-              <textarea
-                value={editedProfile.workExperience || ''}
-                onChange={(e) => handleProfileChange('workExperience', e.target.value)}
-                rows="2"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Awards:</label>
-              <textarea
-                value={editedProfile.awards || ''}
-                onChange={(e) => handleProfileChange('awards', e.target.value)}
-                rows="2"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Challenges:</label>
-              <textarea
-                value={editedProfile.challenges || ''}
-                onChange={(e) => handleProfileChange('challenges', e.target.value)}
-                rows="2"
-              />
-            </div>
+            {/* Fields matching backend Profile entity */}
           </div>
 
           <div className="form-actions">
@@ -244,11 +258,24 @@ const ProfilePage = () => {
           </div>
         </div>
       ) : (
-        <ProfileCard
-          profile={profile}
-          isEditable={true}
-          onEdit={handleEdit}
-        />
+        user ? (
+          profile ? (
+            <ProfileCard
+              profile={profile}
+              isEditable={true}
+              onEdit={handleEdit}
+            />
+          ) : (
+            <div className="no-profile">
+              <p>No profile data yet. Create your profile to get tailored scholarship matches.</p>
+              <button onClick={handleCreateClick} className="create-btn">Create Profile</button>
+            </div>
+          )
+        ) : (
+          <div className="no-profile">
+            <p>Please <Link to="/login">login</Link> to view or create your profile.</p>
+          </div>
+        )
       )}
     </div>
   );

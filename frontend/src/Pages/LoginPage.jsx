@@ -16,6 +16,8 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post('/api/users/login', { username, password });
+      console.log('response.data:', response.data);
+      console.log('type:', typeof response.data);
       // Assuming the backend returns user data on success (including userId)
       console.log('Login successful:', response.data);
       // Store user in auth context + localStorage

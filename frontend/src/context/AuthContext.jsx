@@ -4,6 +4,7 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  
 
   useEffect(() => {
     try {
@@ -15,8 +16,16 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (userData) => {
-    setUser(userData);
-    try { localStorage.setItem('user', JSON.stringify(userData)); } catch (e) { console.error(e); }
+    // Normalize common id fields to `userId` so frontend code can rely on it
+    const normalized = { ...userData };
+    if (!normalized.userId) {
+      if (normalized.id) normalized.userId = normalized.id;
+      else if (normalized.userID) normalized.userId = normalized.userID;
+      else if (normalized.user && normalized.user.userId) normalized.userId = normalized.user.userId;
+    }
+
+    setUser(normalized);
+    try { localStorage.setItem('user', JSON.stringify(normalized)); } catch (e) { console.error(e); }
   };
 
   const logout = () => {
