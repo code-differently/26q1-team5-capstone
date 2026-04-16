@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import axios from 'axios';
 import ScholarshipCard from '../Components/ScholarshipCard';
 
 const ScholarshipPage = () => {
@@ -7,57 +8,32 @@ const ScholarshipPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedField, setSelectedField] = useState('');
 
-  // Mock data - replace with API call to ScholarshipController
-  const mockScholarships = [
-    {
-      scholarshipId: 1,
-      name: "STEM Excellence Award",
-      description: "Award for outstanding students in STEM fields",
-      amount: 5000,
-      deadline: "2026-05-01",
-      fieldOfStudy: "Computer Science",
-      eligibility: "3.5+ GPA, STEM major",
-      requirements: ["Transcript", "Essay", "Recommendation"]
-    },
-    {
-      scholarshipId: 2,
-      name: "Future Leaders Grant",
-      description: "For students showing leadership potential",
-      amount: 2500,
-      deadline: "2026-04-15",
-      fieldOfStudy: "Business",
-      eligibility: "Any major, leadership experience",
-      requirements: ["Resume", "Essay"]
-    },
-    {
-      scholarshipId: 3,
-      name: "Arts & Humanities Fund",
-      description: "Supporting creative and intellectual pursuits",
-      amount: 3000,
-      deadline: "2026-06-30",
-      fieldOfStudy: "Liberal Arts",
-      eligibility: "Arts/Humanities major",
-      requirements: ["Portfolio", "Essay"]
-    },
-    {
-      scholarshipId: 4,
-      name: "Women in Tech Scholarship",
-      description: "Empowering women in technology",
-      amount: 4000,
-      deadline: "2026-03-20",
-      fieldOfStudy: "Computer Science",
-      eligibility: "Female students, tech major",
-      requirements: ["Transcript", "Essay", "Recommendation"]
-    }
-  ];
-
   useEffect(() => {
-    // TODO: Replace with API call: axios.get('/api/scholarships')
-    setTimeout(() => {
-      setScholarships(mockScholarships);
-      setLoading(false);
-    }, 500);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    const fetchScholarships = async () => {
+      try {
+        const response = await axios.get('/api/scholarships');
+        const data = response.data.map(sch => ({
+          scholarshipId: sch.scholarshipId,
+          name: sch.name,
+          description: sch.description,
+          amount: sch.amount,
+          deadline: sch.deadline,
+          fieldOfStudy: sch.fieldOfStudy || 'General',
+          eligibility: sch.eligibilityCriteria || 'Check application for details',
+          requirements: [] // Backend doesn't have this, set to empty
+        }));
+        setScholarships(data);
+      } catch (error) {
+        console.error('Error fetching scholarships:', error);
+        // Fallback to empty array or handle error
+        setScholarships([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchScholarships();
+  }, []);
 
   // Compute filtered scholarships in render instead of effect
   const filteredScholarships = useMemo(() => {
