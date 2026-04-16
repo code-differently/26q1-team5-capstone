@@ -405,3 +405,12 @@ body{
   right: 0;
   border-right-color: var(--border)
 }
+.about-us-image {
+  width: 33%;
+  max-width: 500px; 
+  height: auto;
+  border-radius: 12px;
+  margin: 0 auto 1.5rem auto; /* centers it and adds space below */
+  display: block;
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);  */
+}
