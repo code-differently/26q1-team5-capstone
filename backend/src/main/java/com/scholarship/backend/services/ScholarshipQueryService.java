@@ -40,6 +40,10 @@ public class ScholarshipQueryService {
                 .collect(Collectors.toList());
     }
 
+    public List<Scholarship> getAllScholarships() {
+    return scholarshipRepository.findAll();
+}
+
     public List<Scholarship> filterByField(String field) {
         return scholarshipRepository.findByFieldOfStudy(field);
     }
