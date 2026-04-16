@@ -13,4 +13,5 @@ public interface ScholarshipRepository extends JpaRepository<Scholarship, Long> 
     List<Scholarship> findByState(String state);
     List<Scholarship> findByDeadlineGreaterThan(LocalDate date);
     boolean existsByNameAndSourceApi(String name, String sourceApi);
+    Scholarship findByNameAndSourceApi(String name, String sourceApi);
 }

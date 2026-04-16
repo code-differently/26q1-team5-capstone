@@ -1,23 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 // import ProfileCard from '../Components/ProfileCard';
 // import MatchCard from '../Components/MatchCard';
-import ApplicationCard from '../Components/ApplicationCard';
+// import ApplicationCard from '../Components/ApplicationCard';
 import StudentsImage from '../assets/students.jpeg';
 
-const HomePage = ({ matches, applications, profile, onDeleteApplication }) => {
-  const handleEdit = (applicationId) => {
-    console.log("Edit application:", applicationId);
-    // TODO: Open edit modal or navigate to /applications/${applicationId}/edit
-    alert(`Editing application ${applicationId}`);
-  };
-
-  const handleDelete = (applicationId) => {
-    console.log("Delete application:", applicationId);
-    if (onDeleteApplication) {
-      onDeleteApplication(applicationId);
-    }
-  };
-
+const HomePage = () => {
   return (
     <div className="home-page">
       <h1>About Us</h1>
