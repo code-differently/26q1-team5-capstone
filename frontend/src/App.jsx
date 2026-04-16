@@ -3,14 +3,14 @@ import { Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import './App.css'
 import ApplicationCard from './Components/ApplicationCard'
-import MatchCard from './Components/MatchCard'
+// import MatchCard from './Components/MatchCard'
 import ProfileCard from './Components/ProfileCard'
 import ScholarshipCard from './Components/ScholarshipCard'
 import Navbar from './Components/Navbar'
 import HomePage from './Pages/HomePage'
 import LoginPage from './Pages/LoginPage'
 import RegistrationPage from './Pages/RegistrationPage'
-import MatchesPage from './Pages/MatchesPage'
+// import MatchesPage from './Pages/MatchesPage'
 import ScholarshipPage from './Pages/ScholarshipPage'
 import ApplicationPage from './Pages/ApplicationPage'
 import ProfilePage from './Pages/ProfilePage'
@@ -115,7 +115,7 @@ function App() {
         } />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegistrationPage />} />
-        <Route path="/matches" element={<MatchesPage />} />
+        {/* <Route path="/matches" element={<MatchesPage />} /> */}
         <Route path="/scholarships" element={<ScholarshipPage />} />
         <Route path="/applications" element={<ApplicationPage />} />
         <Route path="/profile" element={<ProfilePage />} />

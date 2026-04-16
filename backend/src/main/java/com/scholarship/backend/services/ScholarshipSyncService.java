@@ -5,6 +5,7 @@ import com.scholarship.backend.repositories.ScholarshipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,18 +21,23 @@ public class ScholarshipSyncService {
     }
 
     public List<Scholarship> syncFromExternalApi() {
-        // Fetch scholarships from external API
-        List<Scholarship> externalScholarships = externalApiClient.fetchScholarshipsFromApi();
+        List<Scholarship> incoming = externalApiClient.fetchScholarshipsFromApi();
+        List<Scholarship> toSave = new ArrayList<>();
 
-        // Save them to the database
-        List<Scholarship> savedScholarships = scholarshipRepository.saveAll(externalScholarships);
+        for (Scholarship scholarship : incoming) {
+            // Deduplicate by name + sourceApi — avoids duplicate rows on repeated syncs
+            boolean alreadyExists = scholarshipRepository
+                .existsByNameAndSourceApi(scholarship.getName(), scholarship.getSourceApi());
 
-        return savedScholarships;
+            if (!alreadyExists) {
+                toSave.add(scholarship);
+            }
+        }
+
+        return scholarshipRepository.saveAll(toSave);
     }
 
     public void refreshScholarships() {
-        // This could implement logic to update existing scholarships
-        // For now, just sync from external API
         syncFromExternalApi();
     }
 }
