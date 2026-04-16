@@ -56,7 +56,7 @@ const LoginPage = () => {
           />
         </div>
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit" style={{ width: '100%', padding: '0.5rem' }}>Login</button>
+        <button type="submit" style={{ width: '108%', padding: '0.5rem' }}>Login</button>
       </form>
       <p style={{ marginTop: '1rem' }}>
         Don't have an account? <a href="/register">Register here</a>

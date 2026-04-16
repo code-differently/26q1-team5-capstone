@@ -47,7 +47,7 @@ function Navbar() {
         <div className={isOpen? 'nav-links active' : 'nav-links'}>
           <Link to="/" onClick={closeMenu}>Home</Link>
           <Link to="/scholarships" onClick={closeMenu}>Scholarships</Link>
-          <Link to="/matches" onClick={closeMenu}>Matches</Link>
+          {/* <Link to="/matches" onClick={closeMenu}>Matches</Link> */}
           <Link to="/applications" onClick={closeMenu}>My Applications</Link>
           <Link to="/profile" onClick={closeMenu}>Profile</Link>
           {user ? (

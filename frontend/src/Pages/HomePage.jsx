@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ProfileCard from '../Components/ProfileCard';
-import MatchCard from '../Components/MatchCard';
+// import MatchCard from '../Components/MatchCard';
 import ApplicationCard from '../Components/ApplicationCard';
 
 const HomePage = ({ matches, applications, profile, onDeleteApplication }) => {
@@ -28,7 +28,7 @@ const HomePage = ({ matches, applications, profile, onDeleteApplication }) => {
       />
 
       <main className="dashboard">
-        <section className="matches-section">
+        {/* <section className="matches-section">
           <h2>Recommended For You</h2>
           <div className="card-grid">
             {matches.length > 0 ? (
@@ -43,7 +43,7 @@ const HomePage = ({ matches, applications, profile, onDeleteApplication }) => {
               <p className="empty-state">No matches yet. Complete your profile to get recommendations.</p>
             )}
           </div>
-        </section>
+        </section> */}
 
         <section className="applications-section">
           <h2>Your Applications</h2>
