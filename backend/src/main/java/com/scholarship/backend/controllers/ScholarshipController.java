@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/scholarships")
+@CrossOrigin(origins = "http://localhost:5174")
 public class ScholarshipController {
 
     @Autowired
@@ -28,6 +29,12 @@ public class ScholarshipController {
     @GetMapping("/search")
     public ResponseEntity<List<Scholarship>> searchScholarships(@RequestParam String query) {
         List<Scholarship> scholarships = scholarshipQueryService.searchScholarships(query);
+        return ResponseEntity.ok(scholarships);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Scholarship>> getAllScholarships() {
+        List<Scholarship> scholarships = scholarshipQueryService.getAllScholarships();
         return ResponseEntity.ok(scholarships);
     }
 
