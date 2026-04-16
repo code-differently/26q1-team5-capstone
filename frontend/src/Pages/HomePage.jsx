@@ -4,8 +4,6 @@ import MatchCard from '../Components/MatchCard';
 import ApplicationCard from '../Components/ApplicationCard';
 
 const HomePage = ({ matches, applications, profile, onDeleteApplication }) => {
-  const [count, setCount] = useState(0);
-
   const handleEdit = (applicationId) => {
     console.log("Edit application:", applicationId);
     // TODO: Open edit modal or navigate to /applications/${applicationId}/edit
@@ -22,15 +20,6 @@ const HomePage = ({ matches, applications, profile, onDeleteApplication }) => {
   return (
     <div className="home-page">
       <h1>Scholarship Tracker</h1>
-
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
 
       <ProfileCard
         profile={profile}
