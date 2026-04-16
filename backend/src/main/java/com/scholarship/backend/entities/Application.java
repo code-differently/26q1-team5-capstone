@@ -1,5 +1,6 @@
 package com.scholarship.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -17,6 +18,7 @@ public class Application {
     
     @ManyToOne
     @JoinColumn(name = "scholarship_id", nullable = false)
+    @JsonIgnoreProperties({"applications"})
     private Scholarship scholarship;
     
     @Enumerated(EnumType.STRING)
@@ -42,6 +44,7 @@ public class Application {
         this.scholarship = scholarship;
         this.status = ApplicationStatus.SAVED;
         this.savedDate = LocalDate.now();
+        this.deadlineAlert = scholarship.getDeadline();
     }
     
     // Getters

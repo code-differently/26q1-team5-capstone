@@ -1,76 +1,44 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import ApplicationCard from '../Components/ApplicationCard';
+import { useAuth } from '../context/AuthContext';
 
 const ApplicationPage = () => {
+  const { user } = useAuth();
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('ALL'); // ALL, SAVED, SUBMITTED, IN_PROGRESS
 
-  // Mock data - replace with API call to ApplicationController
-  const mockApplications = [
-    {
-      applicationId: 101,
-      scholarship: {
-        scholarshipId: 1,
-        name: "STEM Excellence Award",
-        amount: 5000,
-        deadline: "2026-05-01"
-      },
-      status: "IN_PROGRESS",
-      savedDate: "2026-03-10",
-      submittedDate: null,
-      deadlineAlert: "2026-05-01",
-      notes: "Need recommendation letter from Prof. Smith"
-    },
-    {
-      applicationId: 102,
-      scholarship: {
-        scholarshipId: 4,
-        name: "Women in Tech Scholarship",
-        amount: 4000,
-        deadline: "2026-03-20"
-      },
-      status: "SUBMITTED",
-      savedDate: "2026-02-20",
-      submittedDate: "2026-03-01",
-      deadlineAlert: "2026-03-15",
-      notes: null
-    },
-    {
-      applicationId: 103,
-      scholarship: {
-        scholarshipId: 3,
-        name: "Community Service Award",
-        amount: 3000,
-        deadline: "2026-07-01"
-      },
-      status: "SAVED",
-      savedDate: "2026-04-01",
-      submittedDate: null,
-      deadlineAlert: "2026-07-01",
-      notes: "Gather volunteer hour logs"
-    }
-  ];
-
   useEffect(() => {
-    // TODO: Replace with API call: axios.get('/api/applications')
-    setTimeout(() => {
-      setApplications(mockApplications);
-      setLoading(false);
-    }, 500);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    const fetchApplications = async () => {
+      if (!user?.userId) {
+        setLoading(false);
+        return;
+      }
+      try {
+        const response = await axios.get(`/api/applications/${user.userId}`);
+        setApplications(response.data);
+      } catch (error) {
+        console.error('Error fetching applications:', error);
+        setApplications([]);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleEdit = (applicationId) => {
-    console.log("Edit application:", applicationId);
-    // TODO: Navigate to edit page or open modal
-    alert(`Editing application ${applicationId}`);
-  };
+    fetchApplications();
+  }, [user]);
 
-  const handleDelete = (applicationId) => {
+  const handleDelete = async (applicationId) => {
     console.log("Delete application:", applicationId);
     if (window.confirm('Are you sure you want to delete this application?')) {
-      setApplications(applications.filter(app => app.applicationId !== applicationId));
-      // TODO: API call: axios.delete(`/api/applications/${applicationId}`)
+      try {
+        await axios.delete(`/api/applications/${applicationId}`);
+        setApplications(applications.filter(app => app.applicationId !== applicationId));
+      } catch (error) {
+        console.error('Error deleting application:', error);
+        alert('Failed to delete application');
+      }
     }
   };
 
@@ -119,7 +87,6 @@ const ApplicationPage = () => {
             <ApplicationCard
               key={application.applicationId}
               application={application}
-              onEdit={handleEdit}
               onDelete={handleDelete}
             />
           ))
