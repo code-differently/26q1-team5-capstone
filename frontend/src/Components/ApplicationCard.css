@@ -66,6 +66,29 @@
     cursor: pointer
 }
 
+.btn-edit:hover {
+    background: var(--navy);
+    color: #fff;
+}
+
+.btn-save {
+    background: var(--green);
+    border: none;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer
+}
+
+.btn-cancel {
+    background: #64748b;
+    border: none;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer
+}
+
 .btn-delete {
     background: #ef4444;
     border: none;
@@ -73,4 +96,23 @@
     padding: 6px 10px;
     border-radius: 6px;
     cursor: pointer
+}
+
+.status-edit {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.status-select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.status-edit-actions {
+    display: flex;
+    gap: 8px;
 }

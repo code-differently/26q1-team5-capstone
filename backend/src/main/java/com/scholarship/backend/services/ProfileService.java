@@ -50,6 +50,14 @@ public class ProfileService {
     }
 
     public void deleteProfile(long userId) {
-        profileRepository.deleteByUser_UserId(userId);
+        Profile existingProfile = profileRepository.findByUser_UserId(userId);
+        if (existingProfile == null) {
+            throw new IllegalArgumentException("Profile not found for user: " + userId);
+        }
+        try {
+            profileRepository.deleteByUser_UserId(userId);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete profile for user: " + userId, e);
+        }
     }
 }
