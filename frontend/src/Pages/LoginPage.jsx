@@ -30,7 +30,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: 'auto', padding: '2rem' }}>
+    <div className="page-container login-page">
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: '1rem' }}>

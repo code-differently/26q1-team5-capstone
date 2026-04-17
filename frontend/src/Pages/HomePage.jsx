@@ -18,7 +18,7 @@ const HomePage = ({ matches, applications, profile, onDeleteApplication }) => {
   };
 
   return (
-    <div className="home-page">
+    <div className="page-container home-page">
       <h1>Scholarship Tracker</h1>
 
       <ProfileCard

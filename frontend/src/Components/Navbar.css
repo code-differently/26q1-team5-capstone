@@ -33,11 +33,11 @@ position: relative;
 
 .nav-logo-img {
     width: 40px;
-height: 40px;
-object-fit: contain;
-/* help the logo stand out on darker backgrounds */
-filter: brightness(1.12) saturate(1.05);
-z-index: 3;
+    height: 40px;
+    object-fit: contain;
+   /* help the logo stand out on darker backgrounds */
+    filter: brightness(1.12) saturate(1.05);
+    z-index: 3;
 }
 
 .hamburger {
@@ -107,11 +107,11 @@ z-index: 3;
 
 @media(max-width:800px) {
     .hamburger {
-        display: block
+    display: block
     }
 
     .nav-links {
-        position: fixed;
+position: fixed;
 right: 0;
 top: 0;
 height: 100vh;
