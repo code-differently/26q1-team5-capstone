@@ -9,13 +9,14 @@ const LoginPage = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const { login } = useAuth();
+  const API = import.meta.env.VITE_API_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
     try {
-      const response = await axios.post('/api/users/login', { username, password });
+      const response = await axios.post(`${API}/api/users/login`, { username, password });
       console.log('response.data:', response.data);
       console.log('type:', typeof response.data);
       // Assuming the backend returns user data on success (including userId)
