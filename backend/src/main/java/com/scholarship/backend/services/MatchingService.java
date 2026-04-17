@@ -85,6 +85,16 @@ public class MatchingService {
             .collect(Collectors.toList());
     }
 
+    public String getAIScholarshipSearch(long userId) {
+        Profile profile = profileRepository.findByUser_UserId(userId);
+        if (profile == null) {
+            throw new IllegalArgumentException("Profile not found for user: " + userId);
+        }
+
+        String prompt = promptBuilder.buildPrompt(profile);
+        return aiClient.getCompletion(prompt);
+    }
+
     // Keep your test method — useful for verifying the API connection works
     public String testAI() {
         String prompt = """
