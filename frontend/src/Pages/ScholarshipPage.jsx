@@ -60,7 +60,7 @@ const ScholarshipPage = () => {
     }
     setAiLoading(true);
     try {
-      const response = await axios.get(`/api/matches/${user.userId}/ai-search`);
+      const response = await axios.get(`${API}/api/matches/${user.userId}/ai-search`);
       setAiResponse(response.data);
     } catch (error) {
       console.error('Error with AI search:', error);
