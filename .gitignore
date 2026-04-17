@@ -56,10 +56,6 @@ npm-debug.log*
 .env.local
 .env.production
 
-# Application properties with secrets
-**/application*.properties
-!**/application.properties.example
-
 # Database
 *.db
 *.sqlite
