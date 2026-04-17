@@ -10,11 +10,12 @@ const ScholarshipPage = () => {
   const [aiResponse, setAiResponse] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
   const { user } = useAuth();
+  const API = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchScholarships = async () => {
       try {
-        const response = await axios.get('/api/scholarships');
+        const response = await axios.get(`${API}/api/scholarships`);
         const data = response.data.map(sch => ({
           scholarshipId: sch.scholarshipId,
           name: sch.name,

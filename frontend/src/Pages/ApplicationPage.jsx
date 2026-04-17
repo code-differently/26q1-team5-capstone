@@ -8,6 +8,7 @@ const ApplicationPage = () => {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('ALL'); // ALL, SAVED, SUBMITTED, IN_PROGRESS
+  const API = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchApplications = async () => {
@@ -16,7 +17,7 @@ const ApplicationPage = () => {
         return;
       }
       try {
-        const response = await axios.get(`/api/applications/${user.userId}`);
+        const response = await axios.get(`${API}/api/applications/${user.userId}`);
         setApplications(response.data);
       } catch (error) {
         console.error('Error fetching applications:', error);
@@ -33,7 +34,7 @@ const ApplicationPage = () => {
     console.log("Delete application:", applicationId);
     if (window.confirm('Are you sure you want to delete this application?')) {
       try {
-        await axios.delete(`/api/applications/${applicationId}`);
+        await axios.delete(`${API}/api/applications/${applicationId}`);
         setApplications(applications.filter(app => app.applicationId !== applicationId));
       } catch (error) {
         console.error('Error deleting application:', error);
@@ -45,7 +46,7 @@ const ApplicationPage = () => {
   const handleEditStatus = async (applicationId, newStatus) => {
     console.log("Update application status:", applicationId, newStatus);
     try {
-      const response = await axios.put(`/api/applications/${applicationId}/status`, {
+      const response = await axios.put(`${API}/api/applications/${applicationId}/status`, {
         status: newStatus
       });
       // Update the application in the local state
