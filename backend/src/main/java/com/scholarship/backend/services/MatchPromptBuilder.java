@@ -58,7 +58,6 @@ public class MatchPromptBuilder {
     prompt.append("- Apply: https://example.com\n\n");
 
     prompt.append("Rules:\n");
-    prompt.append("- Do NOT return JSON\n");
     prompt.append("- Do NOT use markdown\n");
     prompt.append("- Keep it clean and readable\n");
     prompt.append("- Focus on strong matches based on GPA, major, and goals\n");

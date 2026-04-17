@@ -58,6 +58,7 @@ npm-debug.log*
 
 # Application properties with secrets
 **/application*.properties
+application.properties
 !**/application.properties.example
 
 # Database
