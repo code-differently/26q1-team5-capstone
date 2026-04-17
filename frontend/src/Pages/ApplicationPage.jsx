@@ -42,6 +42,23 @@ const ApplicationPage = () => {
     }
   };
 
+  const handleEditStatus = async (applicationId, newStatus) => {
+    console.log("Update application status:", applicationId, newStatus);
+    try {
+      const response = await axios.put(`/api/applications/${applicationId}/status`, {
+        status: newStatus
+      });
+      // Update the application in the local state
+      setApplications(applications.map(app =>
+        app.applicationId === applicationId ? response.data : app
+      ));
+      alert('Application status updated successfully!');
+    } catch (error) {
+      console.error('Error updating application status:', error);
+      alert('Failed to update application status. Please check if the status transition is valid.');
+    }
+  };
+
   const filteredApplications = applications.filter(app => {
     if (filter === 'ALL') return true;
     return app.status === filter;
@@ -88,6 +105,7 @@ const ApplicationPage = () => {
               key={application.applicationId}
               application={application}
               onDelete={handleDelete}
+              onEdit={handleEditStatus}
             />
           ))
         ) : (

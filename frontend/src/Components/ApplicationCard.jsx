@@ -1,18 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './ApplicationCard.css'
 
-function ApplicationCard({ application, onDelete }) {
+function ApplicationCard({ application, onDelete, onEdit }) {
   // onDelete is the function being called when "Delete" button is clicked.
   const { applicationId, scholarship, status, savedDate, submittedDate, deadlineAlert, notes } = application
   // Fields like scholarship name, status, saved date, submitted date, deadline alert, and notes are being extracted from the application object for display in the card.
+  const [isEditing, setIsEditing] = useState(false)
+  const [selectedStatus, setSelectedStatus] = useState(status)
+
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A'
      return new Date(dateString).toLocaleDateString()
      //This formats the Date and if no date inputed it will return N/A
   }
 
-  const getStatusColor = () => {
-    switch (status) {
+  const getStatusColor = (statusValue) => {
+    switch (statusValue) {
       case 'SAVED': return '#64748b'
       case 'IN_PROGRESS': return '#3b82f6'
       case 'SUBMITTED': return '#22c55e'
@@ -24,14 +27,68 @@ function ApplicationCard({ application, onDelete }) {
     }
   }
 
+  const handleEditClick = () => {
+    setIsEditing(true)
+    setSelectedStatus(status)
+  }
+
+  const handleSaveStatus = () => {
+    if (selectedStatus !== status) {
+      onEdit(applicationId, selectedStatus)
+    }
+    setIsEditing(false)
+  }
+
+  const handleCancelEdit = () => {
+    setSelectedStatus(status)
+    setIsEditing(false)
+  }
+
+  const getValidStatuses = () => {
+    // Define valid status transitions based on current status
+    switch (status) {
+      case 'SAVED':
+        return ['SAVED', 'IN_PROGRESS', 'SUBMITTED']
+      case 'IN_PROGRESS':
+        return ['IN_PROGRESS', 'SUBMITTED']
+      case 'SUBMITTED':
+        return ['SUBMITTED', 'AWARDED', 'REJECTED']
+      case 'AWARDED':
+      case 'REJECTED':
+        return [status] // Final states can't be changed
+      default:
+        return ['SAVED', 'IN_PROGRESS', 'SUBMITTED', 'AWARDED', 'REJECTED']
+    }
+  }
+
   if (!scholarship) return <div className="card error">Scholarship data missing</div>
 
   return (
     <div className="card">
       <h3>{scholarship.name}</h3>
-      <span className="status-badge" style={{ backgroundColor: getStatusColor() }}>
-        {status}
-      </span>
+      {isEditing ? (
+        <div className="status-edit">
+          <select
+            value={selectedStatus}
+            onChange={(e) => setSelectedStatus(e.target.value)}
+            className="status-select"
+          >
+            {getValidStatuses().map(statusOption => (
+              <option key={statusOption} value={statusOption}>
+                {statusOption.replace('_', ' ')}
+              </option>
+            ))}
+          </select>
+          <div className="status-edit-actions">
+            <button className="btn-save" onClick={handleSaveStatus}>Save</button>
+            <button className="btn-cancel" onClick={handleCancelEdit}>Cancel</button>
+          </div>
+        </div>
+      ) : (
+        <span className="status-badge" style={{ backgroundColor: getStatusColor(status) }}>
+          {status.replace('_', ' ')}
+        </span>
+      )}
       <div className="card-details">
         <p><strong>Saved:</strong> {formatDate(savedDate)}</p>
         {submittedDate && <p><strong>Submitted:</strong> {formatDate(submittedDate)}</p>}
@@ -39,6 +96,7 @@ function ApplicationCard({ application, onDelete }) {
         {notes && <p><strong>Notes:</strong> {notes}</p>}
       </div>
       <div className="card-actions">
+        <button className="btn-edit" onClick={handleEditClick}>Edit Status</button>
         <button className="btn-delete" onClick={() => onDelete(applicationId)}>Delete</button>
       </div>
     </div>
