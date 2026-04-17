@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import ScholarshipCard from '../Components/ScholarshipCard';
+import { useAuth } from '../context/AuthContext';
 
 const ScholarshipPage = () => {
   const [scholarships, setScholarships] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedField, setSelectedField] = useState('');
+  const [aiResponse, setAiResponse] = useState('');
+  const [aiLoading, setAiLoading] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchScholarships = async () => {
@@ -55,6 +59,23 @@ const ScholarshipPage = () => {
 
   const fieldsOfStudy = [...new Set(scholarships.map(s => s.fieldOfStudy))];
 
+  const handleAISearch = async () => {
+    if (!user || !user.userId) {
+      alert('Please log in to use AI search');
+      return;
+    }
+    setAiLoading(true);
+    try {
+      const response = await axios.get(`/api/matches/${user.userId}/ai-search`);
+      setAiResponse(response.data);
+    } catch (error) {
+      console.error('Error with AI search:', error);
+      setAiResponse('Error: ' + error.message);
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="page-container">
@@ -88,6 +109,23 @@ const ScholarshipPage = () => {
             ))}
           </select>
         </div>
+      </div>
+
+      <div className="ai-search-section">
+        <button onClick={handleAISearch} disabled={aiLoading}>
+          {aiLoading ? 'Searching...' : 'AI Search Scholarships'}
+        </button>
+        {aiResponse && (
+          <div className="ai-response">
+            <h3>AI Scholarship Recommendations:</h3>
+            <textarea
+              value={aiResponse}
+              readOnly
+              rows={10}
+              style={{ width: '100%', padding: '10px', fontFamily: 'monospace' }}
+            />
+          </div>
+        )}
       </div>
 
       <div className="scholarships-grid">

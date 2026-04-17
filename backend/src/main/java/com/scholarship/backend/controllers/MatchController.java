@@ -29,6 +29,12 @@ public class MatchController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/{userId}/ai-search")
+    public ResponseEntity<String> getAIScholarshipSearch(@PathVariable Long userId) {
+        String aiResponse = matchingService.getAIScholarshipSearch(userId);
+        return ResponseEntity.ok(aiResponse);
+    }
+
     @GetMapping("/test")
     public ResponseEntity<String> testAI() {
         String result = matchingService.testAI();
