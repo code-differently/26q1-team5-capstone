@@ -3,6 +3,7 @@ package com.scholarship.backend.controllers;
 import com.scholarship.backend.entities.Profile;
 import com.scholarship.backend.services.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +35,14 @@ public class ProfileController {
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteProfile(@PathVariable Long userId) {
-        profileService.deleteProfile(userId);
-        return ResponseEntity.noContent().build();
+        try {
+            profileService.deleteProfile(userId);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            System.err.println("Error deleting profile: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

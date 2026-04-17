@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ProfileCard from '../Components/ProfileCard';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
@@ -9,7 +9,8 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [editedProfile, setEditedProfile] = useState({});
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   
   useEffect(() => {
     if (!user) {
@@ -144,6 +145,36 @@ const ProfilePage = () => {
     setIsEditing(false);
   };
 
+  const handleDelete = () => {
+    const apiBase = import.meta.env.VITE_API_URL ?? '';
+    const endpoint = apiBase ? `${apiBase}/api/profiles/${user.userId}` : `/api/profiles/${user.userId}`;
+
+    const deleteProfile = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.delete(endpoint);
+        console.debug('Profile deleted successfully', response);
+        setProfile(null);
+        setEditedProfile({});
+        alert('Profile and account deleted successfully. Logging you out.');
+        // Logout the user
+        logout();
+        // Navigate to home page
+        navigate('/');
+      } catch (err) {
+        console.error('Delete profile error:', err);
+        console.error('Error response:', err.response);
+        console.error('Error message:', err.message);
+        const errorMessage = err.response?.data?.message || err.message || 'Failed to delete profile. Please try again.';
+        alert(errorMessage);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    deleteProfile();
+  };
+
   const handleProfileChange = (field, value) => {
     setEditedProfile(prev => ({
       ...prev,
@@ -264,6 +295,7 @@ const ProfilePage = () => {
               profile={profile}
               isEditable={true}
               onEdit={handleEdit}
+              onDelete={handleDelete}
             />
           ) : (
             <div className="no-profile">
