@@ -9,9 +9,10 @@ import java.util.List;
 
 @Repository
 public interface ScholarshipRepository extends JpaRepository<Scholarship, Long> {
-    List<Scholarship> findByFieldOfStudy(String field);
+    List<Scholarship> findByFieldOfStudy(String fieldOfStudy);
     List<Scholarship> findByState(String state);
     List<Scholarship> findByDeadlineGreaterThan(LocalDate date);
     boolean existsByNameAndSourceApi(String name, String sourceApi);
+    List<Scholarship> findBySourceApi(String sourceApi);
     Scholarship findByNameAndSourceApi(String name, String sourceApi);
 }

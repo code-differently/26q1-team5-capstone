@@ -10,7 +10,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/matches")
-@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:5174", "http://127.0.0.1:5174"})
+@CrossOrigin(origins = { "http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:5174",
+        "http://127.0.0.1:5174" })
 public class MatchController {
 
     @Autowired
@@ -26,5 +27,11 @@ public class MatchController {
     public ResponseEntity<Void> refreshMatches(@PathVariable Long userId) {
         matchingService.refreshMatchesForUser(userId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<String> testAI() {
+        String result = matchingService.testAI();
+        return ResponseEntity.ok(result);
     }
 }
