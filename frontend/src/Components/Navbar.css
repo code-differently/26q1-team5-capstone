@@ -32,12 +32,11 @@ position: relative;
 }
 
 .nav-logo-img {
-    width: 40px;
-height: 40px;
-object-fit: contain;
-/* help the logo stand out on darker backgrounds */
-filter: brightness(1.12) saturate(1.05);
-z-index: 3;
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    filter: brightness(1.12) saturate(1.05);
+    z-index: 3;
 }
 
 .hamburger {

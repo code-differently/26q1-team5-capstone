@@ -6,7 +6,6 @@ const ScholarshipPage = () => {
   const [scholarships, setScholarships] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedField, setSelectedField] = useState('');
 
   useEffect(() => {
     const fetchScholarships = async () => {
@@ -46,14 +45,8 @@ const ScholarshipPage = () => {
       );
     }
 
-    if (selectedField) {
-      filtered = filtered.filter(scholarship => scholarship.fieldOfStudy === selectedField);
-    }
-
     return filtered;
-  }, [searchTerm, selectedField, scholarships]);
-
-  const fieldsOfStudy = [...new Set(scholarships.map(s => s.fieldOfStudy))];
+  }, [searchTerm, scholarships]);
 
   if (loading) {
     return (
@@ -77,17 +70,6 @@ const ScholarshipPage = () => {
           />
         </div>
 
-        <div className="field-filter">
-          <select
-            value={selectedField}
-            onChange={(e) => setSelectedField(e.target.value)}
-          >
-            <option value="">All Fields of Study</option>
-            {fieldsOfStudy.map(field => (
-              <option key={field} value={field}>{field}</option>
-            ))}
-          </select>
-        </div>
       </div>
 
       <div className="scholarships-grid">
@@ -102,9 +84,6 @@ const ScholarshipPage = () => {
         ) : (
           <div className="empty-state">
             <p>No scholarships found matching your criteria.</p>
-            <button onClick={() => { setSearchTerm(''); setSelectedField(''); }}>
-              Clear Filters
-            </button>
           </div>
         )}
       </div>
