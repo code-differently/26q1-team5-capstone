@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/profiles")
 @CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173", 
-"http://localhost:5174", "http://127.0.0.1:5174", "https://your-vercel-app.vercel.app"})
+"http://localhost:5174", "http://127.0.0.1:5174", "https://26q1-team5-capstone-123r0q9vi-jjlc-apstone.vercel.app"})
 public class ProfileController {
 
     @Autowired
