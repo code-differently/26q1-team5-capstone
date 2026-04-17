@@ -3,12 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './RegistrationCard.css';
 
+// Centralized API base URL (IMPORTANT FIX)
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+
 const RegistrationCard = ({ onSuccess, redirectTo = '/login' }) => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
     confirmPassword: ''
   });
+
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -25,7 +29,7 @@ const RegistrationCard = ({ onSuccess, redirectTo = '/login' }) => {
     setError('');
     setLoading(true);
 
-    // Basic validation
+    // Validation
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       setLoading(false);
@@ -44,20 +48,30 @@ const RegistrationCard = ({ onSuccess, redirectTo = '/login' }) => {
         password: formData.password
       };
 
-      const response = await axios.post('/api/users/register', registrationData);
+      // ✅ FIXED: Now correctly points to Railway backend
+      const response = await axios.post(
+        `${API_BASE_URL}/api/users/register`,
+        registrationData
+      );
+
       console.log('Registration successful:', response.data);
 
-      // Call success callback if provided
+      // Success callback
       if (onSuccess) {
         onSuccess(response.data);
       }
 
-      // Navigate to specified route (default: login page)
+      // Navigate after success
       navigate(redirectTo);
 
     } catch (err) {
       console.error('Registration error:', err);
-      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+
+      setError(
+        err.response?.data?.message ||
+        'Registration failed. Please try again.'
+      );
+
     } finally {
       setLoading(false);
     }
@@ -66,8 +80,8 @@ const RegistrationCard = ({ onSuccess, redirectTo = '/login' }) => {
   return (
     <div className="card registration-card">
       <h3>Create Account</h3>
-      <form onSubmit={handleSubmit}>
 
+      <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="username">Username:</label>
           <input
@@ -114,7 +128,9 @@ const RegistrationCard = ({ onSuccess, redirectTo = '/login' }) => {
       </form>
 
       <div className="auth-links">
-        <p>Already have an account? <a href="/login">Login here</a></p>
+        <p>
+          Already have an account? <a href="/login">Login here</a>
+        </p>
       </div>
     </div>
   );
