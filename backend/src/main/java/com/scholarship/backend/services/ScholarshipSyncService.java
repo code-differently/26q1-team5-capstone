@@ -51,4 +51,10 @@ public class ScholarshipSyncService {
     public void refreshScholarships() {
         syncFromExternalApi();
     }
+
+    public void syncIfNeeded() {
+    if (scholarshipRepository.count() == 0) {
+        syncFromExternalApi();
+    }
+}
 }
