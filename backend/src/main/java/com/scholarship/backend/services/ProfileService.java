@@ -2,6 +2,7 @@ package com.scholarship.backend.services;
 
 import com.scholarship.backend.entities.Profile;
 import com.scholarship.backend.repositories.ProfileRepository;
+import com.scholarship.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,19 +10,19 @@ import org.springframework.stereotype.Service;
 public class ProfileService {
 
     private final ProfileRepository profileRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public ProfileService(ProfileRepository profileRepository) {
+    public ProfileService(ProfileRepository profileRepository, UserRepository userRepository) {
         this.profileRepository = profileRepository;
+        this.userRepository = userRepository;
     }
 
     public Profile createProfile(Profile profile) {
-        // Check if profile already exists for this user
         Profile existingProfile = profileRepository.findByUser_UserId(profile.getUser().getUserId());
         if (existingProfile != null) {
             throw new IllegalArgumentException("Profile already exists for user: " + profile.getUser().getUserId());
         }
-
         return profileRepository.save(profile);
     }
 
@@ -35,7 +36,6 @@ public class ProfileService {
             throw new IllegalArgumentException("Profile not found with ID: " + profileId);
         }
 
-        // Update the existing profile with new data
         existingProfile.setName(updatedProfile.getName());
         existingProfile.setGpa(updatedProfile.getGpa());
         existingProfile.setMajor(updatedProfile.getMajor());
@@ -54,10 +54,6 @@ public class ProfileService {
         if (existingProfile == null) {
             throw new IllegalArgumentException("Profile not found for user: " + userId);
         }
-        try {
-            profileRepository.deleteByUser_UserId(userId);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to delete profile for user: " + userId, e);
-        }
+        userRepository.deleteById(userId);
     }
 }
