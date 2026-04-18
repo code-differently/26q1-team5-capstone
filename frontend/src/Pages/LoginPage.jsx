@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -60,7 +61,7 @@ const LoginPage = () => {
         <button type="submit" style={{ width: '108%', padding: '0.5rem' }}>Login</button>
       </form>
       <p style={{ marginTop: '1rem' }}>
-        Don't have an account? <a href="/register">Register here</a>
+        Don't have an account? <Link to="/register">Register here</Link>
       </p>
     </div>
   );
