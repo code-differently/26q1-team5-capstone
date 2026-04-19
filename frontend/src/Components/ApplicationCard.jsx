@@ -45,21 +45,21 @@ function ApplicationCard({ application, onDelete, onEdit }) {
   }
 
   const getValidStatuses = () => {
-    // Define valid status transitions based on current status
-    switch (status) {
-      case 'SAVED':
-        return ['SAVED', 'IN_PROGRESS', 'SUBMITTED']
-      case 'IN_PROGRESS':
-        return ['IN_PROGRESS', 'SUBMITTED']
-      case 'SUBMITTED':
-        return ['SUBMITTED', 'AWARDED', 'REJECTED']
-      case 'AWARDED':
-      case 'REJECTED':
-        return [status] // Final states can't be changed
-      default:
-        return ['SAVED', 'IN_PROGRESS', 'SUBMITTED', 'AWARDED', 'REJECTED']
-    }
+  switch (status) {
+    case 'SAVED':
+      return ['SAVED', 'IN_PROGRESS', 'SUBMITTED', 'AWARDED', 'REJECTED']
+    case 'IN_PROGRESS':
+      return ['IN_PROGRESS', 'SUBMITTED', 'AWARDED', 'REJECTED']
+    case 'SUBMITTED':
+      return ['SUBMITTED', 'AWARDED', 'REJECTED']
+    case 'AWARDED':
+      return ['AWARDED', 'REJECTED']
+    case 'REJECTED':
+      return ['REJECTED', 'IN_PROGRESS', 'SAVED']
+    default:
+      return ['SAVED', 'IN_PROGRESS', 'SUBMITTED', 'AWARDED', 'REJECTED']
   }
+}
 
   if (!scholarship) return <div className="card error">Scholarship data missing</div>
 

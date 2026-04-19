@@ -74,30 +74,47 @@ public class ApplicationService {
     }
 
     public void validateTransition(ApplicationStatus from, ApplicationStatus to) {
-        // Define valid transitions
-        switch (from) {
-            case SAVED:
-                if (to != ApplicationStatus.IN_PROGRESS && to != ApplicationStatus.SUBMITTED) {
-                    throw new IllegalArgumentException("Invalid transition from " + from + " to " + to);
-                }
-                break;
-            case IN_PROGRESS:
-                if (to != ApplicationStatus.SUBMITTED) {
-                    throw new IllegalArgumentException("Invalid transition from " + from + " to " + to);
-                }
-                break;
-            case SUBMITTED:
-                if (to != ApplicationStatus.AWARDED && to != ApplicationStatus.REJECTED) {
-                    throw new IllegalArgumentException("Invalid transition from " + from + " to " + to);
-                }
-                break;
-            case AWARDED:
-            case REJECTED:
-                throw new IllegalArgumentException("Cannot change status from final state: " + from);
-            default:
-                throw new IllegalArgumentException("Unknown status: " + from);
-        }
+    if (from == to) return; // No-op, always valid
+
+    switch (from) {
+        case SAVED:
+            if (to != ApplicationStatus.IN_PROGRESS &&
+                to != ApplicationStatus.SUBMITTED &&
+                to != ApplicationStatus.AWARDED &&
+                to != ApplicationStatus.REJECTED) {
+                throw new IllegalArgumentException("Invalid transition from " + from + " to " + to);
+            }
+            break;
+        case IN_PROGRESS:
+            if (to != ApplicationStatus.SAVED &&
+                to != ApplicationStatus.SUBMITTED &&
+                to != ApplicationStatus.AWARDED &&
+                to != ApplicationStatus.REJECTED) {
+                throw new IllegalArgumentException("Invalid transition from " + from + " to " + to);
+            }
+            break;
+        case SUBMITTED:
+            if (to != ApplicationStatus.AWARDED &&
+                to != ApplicationStatus.REJECTED &&
+                to != ApplicationStatus.IN_PROGRESS) {
+                throw new IllegalArgumentException("Invalid transition from " + from + " to " + to);
+            }
+            break;
+        case AWARDED:
+            if (to != ApplicationStatus.REJECTED) {
+                throw new IllegalArgumentException("Invalid transition from " + from + " to " + to);
+            }
+            break;
+        case REJECTED:
+            if (to != ApplicationStatus.SAVED &&
+                to != ApplicationStatus.IN_PROGRESS) {
+                throw new IllegalArgumentException("Invalid transition from " + from + " to " + to);
+            }
+            break;
+        default:
+            throw new IllegalArgumentException("Unknown status: " + from);
     }
+}
 
     public List<Application> getApplications(long userId) {
         return applicationRepository.findByUser_UserId(userId);
