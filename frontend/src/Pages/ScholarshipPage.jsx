@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import ScholarshipCard from '../Components/ScholarshipCard';
 import { useAuth } from '../context/AuthContext';
+import PageTransition from '../Components/PageTransition';
 
 const ScholarshipPage = () => {
   const [scholarships, setScholarships] = useState([]);
@@ -39,7 +40,6 @@ const ScholarshipPage = () => {
     fetchScholarships();
   }, []);
 
-  // Compute filtered scholarships in render instead of effect
   const filteredScholarships = useMemo(() => {
     let filtered = scholarships;
 
@@ -79,54 +79,56 @@ const ScholarshipPage = () => {
   }
 
   return (
-    <div className="page-container">
-      <h1>Browse Scholarships</h1>
+    <PageTransition>
+      <div className="page-container">
+        <h1>Browse Scholarships</h1>
 
-      <div className="filters-section">
-        <div className="search-bar">
-          <input
-            type="text"
-            placeholder="Search scholarships..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+        <div className="filters-section">
+          <div className="search-bar">
+            <input
+              type="text"
+              placeholder="Search scholarships..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+
         </div>
 
-      </div>
+        <div className="ai-search-section">
+          <button className="ai-search-btn" onClick={handleAISearch} disabled={aiLoading}>
+            {aiLoading ? 'Searching...' : 'AI Search Scholarships'}
+          </button>
+          {aiResponse && (
+            <div className="ai-response">
+              <h3>AI Scholarship Recommendations:</h3>
+              <textarea
+                value={aiResponse}
+                readOnly
+                rows={10}
+                style={{ width: '100%', padding: '10px', fontFamily: 'monospace' }}
+              />
+            </div>
+          )}
+        </div>
 
-      <div className="ai-search-section">
-        <button className="ai-search-btn" onClick={handleAISearch} disabled={aiLoading}>
-          {aiLoading ? 'Searching...' : 'AI Search Scholarships'}
-        </button>
-        {aiResponse && (
-          <div className="ai-response">
-            <h3>AI Scholarship Recommendations:</h3>
-            <textarea
-              value={aiResponse}
-              readOnly
-              rows={10}
-              style={{ width: '100%', padding: '10px', fontFamily: 'monospace' }}
-            />
-          </div>
-        )}
+        <div className="scholarships-grid">
+          {filteredScholarships.length > 0 ? (
+            filteredScholarships.map(scholarship => (
+              <ScholarshipCard
+                key={scholarship.scholarshipId}
+                scholarship={scholarship}
+                showApplyButton={true}
+              />
+            ))
+          ) : (
+            <div className="empty-state">
+              <p>No scholarships found matching your criteria.</p>
+            </div>
+          )}
+        </div>
       </div>
-
-      <div className="scholarships-grid">
-        {filteredScholarships.length > 0 ? (
-          filteredScholarships.map(scholarship => (
-            <ScholarshipCard
-              key={scholarship.scholarshipId}
-              scholarship={scholarship}
-              showApplyButton={true}
-            />
-          ))
-        ) : (
-          <div className="empty-state">
-            <p>No scholarships found matching your criteria.</p>
-          </div>
-        )}
-      </div>
-    </div>
+    </PageTransition>
   );
 };
 
