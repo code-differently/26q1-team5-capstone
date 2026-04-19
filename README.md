@@ -1,214 +1,152 @@
-# 26q1-team5-capstone
 # Scholarship Finder
 
-> *Find the funding you actually qualify for — powered by AI.*
+*Find the funding you actually qualify for — powered by AI.*
 
 ---
 
-##  Overview
+## The Team
 
-**Scholarship Finder** is a full-stack web application that helps students discover and manage funding opportunities using intelligent matching.
-
-Instead of relying on fragmented scholarship websites, the platform integrates real scholarship data and uses AI to connect users with opportunities they are most likely qualified for.
-
-By combining structured grant data with personalized student profiles, the system transforms a complex and overwhelming search process into a streamlined, data-driven experience.
+Jayden Andrews  
+James Barclay  
+Lan Nguyen  
 
 ---
 
-## 💡 Key Value
-Unlike traditional scholarship search tools, this platform provides:
+## Description of the App
 
--  Real-time schoalrship listings 
--  AI-powered personalized matching  
--  Deadline-aware prioritization  
--  Application tracking system  
+**Scholarship Finder** is a full-stack web application designed to simplify the scholarship discovery process using AI-powered matching.
 
----
+For many students, finding financial aid is overwhelming due to scattered resources and complex eligibility requirements. This platform centralizes scholarship opportunities and uses intelligent matching to connect students with funding they are most likely to qualify for.
 
-##  Problem Statement
+By combining structured scholarship data with personalized student profiles, the app transforms a fragmented and time-consuming search process into a streamlined, data-driven experience.
 
-There is no widely available, free, and comprehensive public API for scholarships or financial aid data, making it difficult to build a centralized discovery platform.
+### Key Features
 
-To solve this, our system uses publicly available data from as the primary source of funding opportunities. However, raw grant data is not personalized and can still overwhelm users.
-
-The core challenge is:
-
-> How can we use AI to transform raw scholarship data into personalized recommendations that match students with opportunities they are actually qualified for, while helping them prioritize and manage applications effectively?
+- AI-powered personalized scholarship matching  
+- Searchable and filterable scholarship directory  
+- Deadline-aware prioritization of opportunities  
+- Application tracking system  
+- Continuous surfacing of new relevant opportunities  
 
 ---
 
-##  Objectives
+## Demo
 
-- Allow students to build a detailed profile including:
-  - Academic background (GPA, major, enrollment status)
-  - Demographics and location
-  - Career goals and interests
-  - Financial need
+https://26q1-team5-capstone.vercel.app/
 
-- Integrate with AI to fetch real, up-to-date grant opportunities 
-
-- Provide a searchable and filterable grant directory by:
-  - Field of study
-  - State/location
-  - Deadline and eligibility
-
-- Implement AI-powered matching to:
-  - Analyze user profiles against grant requirements
-  - Identify relevant opportunities
-  - Estimate qualification likelihood
-
-- Rank opportunities based on:
-  - AI-generated fit score
-  - Application deadline urgency
-
-- Track application progress:
-  - Saved
-  - In Progress
-  - Submitted
-  - Awarded
-  - Rejected
-
-- Continuously surface new matching opportunities as they become available
-
-- Ensure user privacy:
-  - Secure authentication
-  - Protected profile data
-  - User-controlled account deletion
 
 ---
 
-## System Architecture
+## Installation Instructions
+
+### Prerequisites
+
+- Java 17+  
+- Maven  
+- Node.js  
+- PostgreSQL  
+- AI API key (optional, limited usage due to token constraints)
+
+---
+
+### Backend Setup
+
+```bash
+cd backend
+mvn clean install
+mvn spring-boot:run
+```
+
+---
+
+### Frontend Setup
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+---
+
+### Environment Variables
+
+Create an `application.properties` file (or use environment variables):
+
+```properties
+ai.api.key=YOUR_API_KEY
+spring.datasource.url=YOUR_DB_URL
+spring.datasource.username=YOUR_DB_USER
+spring.datasource.password=YOUR_DB_PASSWORD
+```
+
+Note: AI matching features may be limited due to API token constraints.
+
+---
+
+## System Overview
 
 ### Core Entities
 
-- **User** – authentication and account management  
-- **Profile** – student data used for AI matching  
-- **Scholarship** – funding opportunities from external sources  
-- **Application** – tracks user engagement and status  
-
----
-
-### Relationships
-
-- A **User** owns one **Profile**
-- A **User** can have many **Applications**
-- A **Grant/Scholarship** can have many **Applications**
-
----
-
-### Backend Design
-
-- **Controllers** – REST API endpoints  
-- **Services** – business logic layer  
-- **Repositories** – database access via Spring Data JPA  
-- **AI Layer** – matching and recommendation engine  
+- User – authentication and account management  
+- Profile – student data used for AI matching  
+- Scholarship – funding opportunities  
+- Application – tracks user progress  
 
 ---
 
 ### AI Matching Flow
 
 1. Retrieve user profile  
-2. Fetch grant opportunities from database  
-3. Build AI prompt using profile + grants  
-4. Send request via AI client  
-5. Parse and extract relevant matches  
-6. Rank results by fit score and deadline priority  
+2. Fetch scholarship opportunities  
+3. Construct AI prompt with profile + opportunities  
+4. Send request to AI service  
+5. Parse results and extract matches  
+6. Rank by fit score and deadline priority  
 
 ---
 
-## Core Features
+## Screenshots
 
-### 👤 User & Profile Management
-- Secure authentication system  
-- Create, update, and delete user profiles  
-- Store academic and personal information securely  
+## Screenshots
 
----
-
-### Grant Discovery
-- Search and filter funding opportunities  
-- Filter by:
-  - Field of study  
-  - State  
-  - Deadline  
+<p align="center">
+  <img src="screenshots/homepage.png" width="45%" />
+  <img src="screenshots/scholarship.png" width="45%" />
+</p>
+<p align="center">
+  <img src="screenshots/applications.png" width="45%" />
+  <img src="screenshots/profile.png" width="45%" />
+</p>
 
 ---
 
-###  AI-Powered Matching
-- Personalized recommendations per user  
-- AI evaluates eligibility based on:
-  - Profile data  
-  - Grant requirements  
-- Ranked match results with relevance scoring  
+## Known Issues
+
+- Limited AI API token availability can restrict matching functionality  
+- No fully comprehensive public scholarship API; data may be incomplete  
+- Some opportunities may lack detailed eligibility information  
+- Real-time updates depend on external data refresh cycles  
+- Environment configuration can be error-prone during deployment  
 
 ---
 
-### Application Tracking
-- Track application lifecycle:
-  - Saved  
-  - In Progress  
-  - Submitted  
-  - Awarded  
-  - Rejected  
-- Add notes and deadlines per application  
+## Roadmap Features
+
+- Improve AI matching accuracy with optimized prompt engineering  
+- Expand scholarship data ingestion and normalization
+- Allow user to create custom applications
+- Add notifications for deadlines and new matches  
+- Enhance mobile responsiveness  
 
 ---
 
-###  Data Synchronization
-- Fetch real-time grant data from **:contentReference[oaicite:3]{index=3}**
-- Periodically refresh dataset to ensure up-to-date listings  
-- No hardcoded opportunities  
+## Credits
 
----
-
-##  Tech Stack
-
-### Backend
-- Java  
-- Spring Boot  
-- Spring Data JPA  
-- REST APIs  
-
-### AI Integration
-- External AI API via `ClaudeAI`  
-- Prompt-based matching system  
-
-### Database
-- PostgresSQL
-
-### Frontend
-- frontend framework: React 
-
----
-
-## Getting Started
-
-### Prerequisites
-- Java 17+  
-- Maven  
-- Node.js  
-- API key for AI service or a source to retrieve data
-
-
----
-
-### Installation
-
-```bash
-git clone https://github.com/code-differently/26q1-team5.git
-
-
-# Backend setup
-mvn clean install
-mvn spring-boot:run
-
-# Frontend setup
-npm install
-npm run dev
-
-Screenshots
-
-Dashboard
-Profile setup
-AI match results
-Application tracker
+Built as part of the Code Differently Capstone Program  
+Data provided by Grants.gov  
+Technologies used:
+  - Spring Boot  
+  - React  
+  - PostgreSQL
+  - Claude AI API (limited usage due to token constraints)  
