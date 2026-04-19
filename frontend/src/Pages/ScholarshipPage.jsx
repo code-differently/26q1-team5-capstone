@@ -95,7 +95,7 @@ const ScholarshipPage = () => {
       </div>
 
       <div className="ai-search-section">
-        <button onClick={handleAISearch} disabled={aiLoading}>
+        <button className="ai-search-btn" onClick={handleAISearch} disabled={aiLoading}>
           {aiLoading ? 'Searching...' : 'AI Search Scholarships'}
         </button>
         {aiResponse && (
