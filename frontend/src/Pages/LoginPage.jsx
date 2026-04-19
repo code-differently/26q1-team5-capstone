@@ -10,6 +10,7 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
+  const API = import.meta.env.VITE_API_URL ?? '';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,7 +18,7 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('/api/users/login', { username, password });
+      const response = await axios.post(`${API}/api/users/login`, { username, password });
       if (response.data) login(response.data);
       navigate('/profile');
     } catch (err) {
