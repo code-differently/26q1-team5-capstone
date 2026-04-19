@@ -447,3 +447,90 @@ body{
   color: #333;
   background: #f8f9fa;
 }
+
+.no-profile {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  max-width: 500px;
+  margin: 2rem auto;
+}
+
+.no-profile-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.no-profile h2 {
+  color: var(--navy-dark);
+  margin-bottom: 0.5rem;
+}
+
+.no-profile p {
+  color: #666;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.no-profile a {
+  color: var(--navy);
+  font-weight: 500;
+}
+
+.create-btn {
+  background: var(--navy);
+  color: white;
+  border: none;
+  padding: .75rem 2rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color .3s;
+}
+
+.create-btn:hover {
+  background: var(--navy-dark);
+}
+
+.danger-zone {
+  max-width: 500px;
+  margin: 2rem auto 0;
+  padding: 1.5rem;
+  border: 1px solid #f5c6cb;
+  border-radius: 12px;
+  background: #fff8f8;
+  text-align: center;
+}
+
+.danger-zone h3 {
+  color: #dc3545;
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.danger-zone p {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.delete-account-btn {
+  background: white;
+  color: #dc3545;
+  border: 1px solid #dc3545;
+  padding: .6rem 1.5rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all .3s;
+}
+
+.delete-account-btn:hover {
+  background: #dc3545;
+  color: white;
+}
+
