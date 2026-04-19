@@ -20,7 +20,6 @@ function ProfileCard({ profile, isEditable, onEdit }) {
         <p><strong>Status:</strong> {enrollmentStatus || '—'}</p>
         <p><strong>State:</strong> {state || '—'}</p>
         <p><strong>Ethnicity:</strong> {ethnicity || '—'}</p>
-        <p><strong>Financial Aid Needed:</strong> {needsFinancialAid == null ? '—' : (needsFinancialAid ? 'Yes' : 'No')}</p>
         <p><strong>Career Goals:</strong> {careerGoals || '—'}</p>
         <p><strong>Interests:</strong> {interests || '—'}</p>
       </div>
