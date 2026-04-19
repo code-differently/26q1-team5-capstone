@@ -206,7 +206,6 @@ const ProfilePage = () => {
                 onChange={(e) => handleProfileChange('name', e.target.value)}
               />
             </div>
-
             <div className="form-group">
               <label>GPA:</label>
               <input
@@ -221,7 +220,6 @@ const ProfilePage = () => {
                 }}
               />
             </div>
-
             <div className="form-group">
               <label>Ethnicity:</label>
               <input
@@ -230,7 +228,6 @@ const ProfilePage = () => {
                 onChange={(e) => handleProfileChange('ethnicity', e.target.value)}
               />
             </div>
-
             <div className="form-group">
               <label>Major:</label>
               <input
@@ -239,7 +236,6 @@ const ProfilePage = () => {
                 onChange={(e) => handleProfileChange('major', e.target.value)}
               />
             </div>
-
             <div className="form-group">
               <label>Enrollment Status:</label>
               <select
@@ -251,8 +247,6 @@ const ProfilePage = () => {
                 <option value="Graduate">Graduate</option>
               </select>
             </div>
-
-
             <div className="form-group">
               <label>State:</label>
               <input
@@ -261,7 +255,6 @@ const ProfilePage = () => {
                 onChange={(e) => handleProfileChange('state', e.target.value)}
               />
             </div>
-
             <div className="form-group">
               <label>Career Goals:</label>
               <textarea
@@ -270,7 +263,6 @@ const ProfilePage = () => {
                 rows="3"
               />
             </div>
-
             <div className="form-group">
               <label>Interests:</label>
               <textarea
@@ -279,10 +271,7 @@ const ProfilePage = () => {
                 rows="2"
               />
             </div>
-
-            {/* Fields matching backend Profile entity */}
           </div>
-
           <div className="form-actions">
             <button onClick={handleSave} className="save-btn">Save Changes</button>
             <button onClick={handleCancel} className="cancel-btn">Cancel</button>
@@ -290,21 +279,44 @@ const ProfilePage = () => {
         </div>
       ) : (
         user ? (
-          profile ? (
-            <ProfileCard
-              profile={profile}
-              isEditable={true}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
-          ) : (
-            <div className="no-profile">
-              <p>No profile data yet. Create your profile to get tailored scholarship matches.</p>
-              <button onClick={handleCreateClick} className="create-btn">Create Profile</button>
+          <>
+            {profile ? (
+              <ProfileCard
+                profile={profile}
+                isEditable={true}
+                onEdit={handleEdit}
+              />
+            ) : (
+              <div className="no-profile">
+                <div className="no-profile-icon">🎓</div>
+                <h2>No profile yet</h2>
+                <p>Create your profile to get AI-powered scholarship matches tailored to you.</p>
+                <button onClick={handleCreateClick} className="create-btn">
+                  Create Profile
+                </button>
+              </div>
+            )}
+
+            {/* Delete account always visible at page level */}
+            <div className="danger-zone">
+              <h3>Danger Zone</h3>
+              <p>Permanently delete your account and all associated data.</p>
+              <button
+                onClick={() => {
+                  if (window.confirm('Are you sure you want to delete your account? This cannot be undone.')) {
+                    handleDelete();
+                  }
+                }}
+                className="delete-account-btn"
+              >
+                Delete Account
+              </button>
             </div>
-          )
+          </>
         ) : (
           <div className="no-profile">
+            <div className="no-profile-icon">🔒</div>
+            <h2>Not logged in</h2>
             <p>Please <Link to="/login">login</Link> to view or create your profile.</p>
           </div>
         )
