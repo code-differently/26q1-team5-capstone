@@ -534,3 +534,32 @@ body{
   color: white;
 }
 
+.filter-tabs {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.filter-tab {
+  background: white;
+  color: var(--navy);
+  border: 2px solid var(--navy);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-tab:hover {
+  background: var(--accent-bg);
+}
+
+.filter-tab.active {
+  background: var(--navy);
+  color: white;
+}
+
