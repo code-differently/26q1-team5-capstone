@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ApplicationCard from '../Components/ApplicationCard';
 import { useAuth } from '../context/AuthContext';
+import PageTransition from '../Components/PageTransition';
 
 const ApplicationPage = () => {
   const { user } = useAuth();
@@ -84,39 +85,41 @@ const ApplicationPage = () => {
   }
 
   return (
-    <div className="page-container">
-      <h1>My Applications</h1>
+    <PageTransition>
+      <div className="page-container">
+        <h1>My Applications</h1>
 
-      <div className="filter-tabs">
-        {Object.entries(statusCounts).map(([status, count]) => (
-          <button
-            key={status}
-            className={`filter-tab ${filter === status ? 'active' : ''}`}
-            onClick={() => setFilter(status)}
-          >
-            {status === 'ALL' ? 'All' : status.replace('_', ' ')} ({count})
-          </button>
-        ))}
-      </div>
+        <div className="filter-tabs">
+          {Object.entries(statusCounts).map(([status, count]) => (
+            <button
+              key={status}
+              className={`filter-tab ${filter === status ? 'active' : ''}`}
+              onClick={() => setFilter(status)}
+            >
+              {status === 'ALL' ? 'All' : status.replace('_', ' ')} ({count})
+            </button>
+          ))}
+        </div>
 
-      <div className="applications-grid">
-        {filteredApplications.length > 0 ? (
-          filteredApplications.map(application => (
-            <ApplicationCard
-              key={application.applicationId}
-              application={application}
-              onDelete={handleDelete}
-              onEdit={handleEditStatus}
-            />
-          ))
-        ) : (
-          <div className="empty-state">
-            <p>No applications found in this category.</p>
-            <p>Start applying for scholarships to track your progress!</p>
-          </div>
-        )}
+        <div className="applications-grid">
+          {filteredApplications.length > 0 ? (
+            filteredApplications.map(application => (
+              <ApplicationCard
+                key={application.applicationId}
+                application={application}
+                onDelete={handleDelete}
+                onEdit={handleEditStatus}
+              />
+            ))
+          ) : (
+            <div className="empty-state">
+              <p>No applications found in this category.</p>
+              <p>Start applying for scholarships to track your progress!</p>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </PageTransition>
   );
 };
 

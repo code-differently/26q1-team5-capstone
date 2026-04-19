@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import logoImg from '../assets/logo.png'
 import './Navbar.css'
 import { useAuth } from '../context/AuthContext'
@@ -14,7 +14,6 @@ function Navbar() {
   const closeMenu = () => setIsOpen(false)
 
   const handleLogout = () => {
-    // TODO: Call UserController logout + clear token
     logout()
     closeMenu()
     navigate('/login')
@@ -22,7 +21,7 @@ function Navbar() {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (navRef.current &&!navRef.current.contains(event.target)) {
+      if (navRef.current && !navRef.current.contains(event.target)) {
         setIsOpen(false)
       }
     }
@@ -33,23 +32,48 @@ function Navbar() {
   return (
     <nav className="navbar" ref={navRef}>
       <div className="nav-container">
-        <Link to="/" className="nav-logo" onClick={closeMenu}>
+        <NavLink to="/" className="nav-logo" onClick={closeMenu}>
           <img src={logoImg} alt="Scholarship Finder logo" className="nav-logo-img" />
           <h2>Scholarship Finder</h2>
-        </Link>
+        </NavLink>
 
         <div className="hamburger" onClick={toggleMenu}>
-          <span className={isOpen? 'bar open' : 'bar'}></span>
-          <span className={isOpen? 'bar open' : 'bar'}></span>
-          <span className={isOpen? 'bar open' : 'bar'}></span>
+          <span className={isOpen ? 'bar open' : 'bar'}></span>
+          <span className={isOpen ? 'bar open' : 'bar'}></span>
+          <span className={isOpen ? 'bar open' : 'bar'}></span>
         </div>
 
-        <div className={isOpen? 'nav-links active' : 'nav-links'}>
-          <Link to="/" onClick={closeMenu}>Home</Link>
-          <Link to="/scholarships" onClick={closeMenu}>Scholarships</Link>
-          {/* <Link to="/matches" onClick={closeMenu}>Matches</Link> */}
-          <Link to="/applications" onClick={closeMenu}>My Applications</Link>
-          <Link to="/profile" onClick={closeMenu}>Profile</Link>
+        <div className={isOpen ? 'nav-links active' : 'nav-links'}>
+          <NavLink
+            to="/"
+            end
+            onClick={closeMenu}
+            className={({ isActive }) => isActive ? 'nav-active' : ''}
+          >
+            Home
+          </NavLink>
+          <NavLink
+            to="/scholarships"
+            onClick={closeMenu}
+            className={({ isActive }) => isActive ? 'nav-active' : ''}
+          >
+            Scholarships
+          </NavLink>
+          <NavLink
+            to="/applications"
+            onClick={closeMenu}
+            className={({ isActive }) => isActive ? 'nav-active' : ''}
+          >
+            My Applications
+          </NavLink>
+          <NavLink
+            to="/profile"
+            onClick={closeMenu}
+            className={({ isActive }) => isActive ? 'nav-active' : ''}
+          >
+            Profile
+          </NavLink>
+
           {user ? (
             <>
               <span className="nav-user">{user.username}</span>
@@ -57,8 +81,22 @@ function Navbar() {
             </>
           ) : (
             <div className="auth-links">
-              <Link to="/login" onClick={closeMenu}>Login</Link>
-              <Link to="/register" onClick={closeMenu} className="register-link">Register</Link>
+              <NavLink
+                to="/login"
+                onClick={closeMenu}
+                className={({ isActive }) => isActive ? 'nav-active' : ''}
+              >
+                Login
+              </NavLink>
+              <NavLink
+                to="/register"
+                onClick={closeMenu}
+                className={({ isActive }) =>
+                  isActive ? 'register-link nav-active' : 'register-link'
+                }
+              >
+                Register
+              </NavLink>
             </div>
           )}
         </div>

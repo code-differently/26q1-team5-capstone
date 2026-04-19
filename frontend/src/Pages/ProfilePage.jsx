@@ -3,6 +3,7 @@ import ProfileCard from '../Components/ProfileCard';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import PageTransition from '../Components/PageTransition';
 
 const ProfilePage = () => {
   const [profile, setProfile] = useState(null);
@@ -11,7 +12,7 @@ const ProfilePage = () => {
   const [editedProfile, setEditedProfile] = useState({});
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     if (!user) {
       setLoading(false);
@@ -191,137 +192,138 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="page-container">
-      <h1>My Profile</h1>
+    <PageTransition>
+      <div className="page-container">
+        <h1>My Profile</h1>
 
-      {isEditing ? (
-        <div className="profile-edit-form">
-          <h2>{profile ? 'Edit Profile' : 'Create Profile'}</h2>
-          <div className="form-grid">
-            <div className="form-group">
-              <label>Name:</label>
-              <input
-                type="text"
-                value={editedProfile.name || ''}
-                onChange={(e) => handleProfileChange('name', e.target.value)}
-              />
+        {isEditing ? (
+          <div className="profile-edit-form">
+            <h2>{profile ? 'Edit Profile' : 'Create Profile'}</h2>
+            <div className="form-grid">
+              <div className="form-group">
+                <label>Name:</label>
+                <input
+                  type="text"
+                  value={editedProfile.name || ''}
+                  onChange={(e) => handleProfileChange('name', e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <label>GPA:</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  min="0"
+                  max="4.0"
+                  value={editedProfile.gpa || ''}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    handleProfileChange('gpa', val === '' ? null : parseFloat(val));
+                  }}
+                />
+              </div>
+              <div className="form-group">
+                <label>Ethnicity:</label>
+                <input
+                  type="text"
+                  value={editedProfile.ethnicity || ''}
+                  onChange={(e) => handleProfileChange('ethnicity', e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <label>Major:</label>
+                <input
+                  type="text"
+                  value={editedProfile.major || ''}
+                  onChange={(e) => handleProfileChange('major', e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <label>Enrollment Status:</label>
+                <select
+                  value={editedProfile.enrollmentStatus || ''}
+                  onChange={(e) => handleProfileChange('enrollmentStatus', e.target.value)}
+                >
+                  <option value="Full-time">Full-time</option>
+                  <option value="Part-time">Part-time</option>
+                  <option value="Graduate">Graduate</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label>State:</label>
+                <input
+                  type="text"
+                  value={editedProfile.state || ''}
+                  onChange={(e) => handleProfileChange('state', e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <label>Career Goals:</label>
+                <textarea
+                  value={editedProfile.careerGoals || ''}
+                  onChange={(e) => handleProfileChange('careerGoals', e.target.value)}
+                  rows="3"
+                />
+              </div>
+              <div className="form-group">
+                <label>Interests:</label>
+                <textarea
+                  value={editedProfile.interests || ''}
+                  onChange={(e) => handleProfileChange('interests', e.target.value)}
+                  rows="2"
+                />
+              </div>
             </div>
-            <div className="form-group">
-              <label>GPA:</label>
-              <input
-                type="number"
-                step="0.1"
-                min="0"
-                max="4.0"
-                value={editedProfile.gpa || ''}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  handleProfileChange('gpa', val === '' ? null : parseFloat(val));
-                }}
-              />
-            </div>
-            <div className="form-group">
-              <label>Ethnicity:</label>
-              <input
-                type="text"
-                value={editedProfile.ethnicity || ''}
-                onChange={(e) => handleProfileChange('ethnicity', e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <label>Major:</label>
-              <input
-                type="text"
-                value={editedProfile.major || ''}
-                onChange={(e) => handleProfileChange('major', e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <label>Enrollment Status:</label>
-              <select
-                value={editedProfile.enrollmentStatus || ''}
-                onChange={(e) => handleProfileChange('enrollmentStatus', e.target.value)}
-              >
-                <option value="Full-time">Full-time</option>
-                <option value="Part-time">Part-time</option>
-                <option value="Graduate">Graduate</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>State:</label>
-              <input
-                type="text"
-                value={editedProfile.state || ''}
-                onChange={(e) => handleProfileChange('state', e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <label>Career Goals:</label>
-              <textarea
-                value={editedProfile.careerGoals || ''}
-                onChange={(e) => handleProfileChange('careerGoals', e.target.value)}
-                rows="3"
-              />
-            </div>
-            <div className="form-group">
-              <label>Interests:</label>
-              <textarea
-                value={editedProfile.interests || ''}
-                onChange={(e) => handleProfileChange('interests', e.target.value)}
-                rows="2"
-              />
+            <div className="form-actions">
+              <button onClick={handleSave} className="save-btn">Save Changes</button>
+              <button onClick={handleCancel} className="cancel-btn">Cancel</button>
             </div>
           </div>
-          <div className="form-actions">
-            <button onClick={handleSave} className="save-btn">Save Changes</button>
-            <button onClick={handleCancel} className="cancel-btn">Cancel</button>
-          </div>
-        </div>
-      ) : (
-        user ? (
-          <>
-            {profile ? (
-              <ProfileCard
-                profile={profile}
-                isEditable={true}
-                onEdit={handleEdit}
-              />
-            ) : (
-              <div className="no-profile">
-                <div className="no-profile-icon">🎓</div>
-                <h2>No profile yet</h2>
-                <p>Create your profile to get AI-powered scholarship matches tailored to you.</p>
-                <button onClick={handleCreateClick} className="create-btn">
-                  Create Profile
+        ) : (
+          user ? (
+            <>
+              {profile ? (
+                <ProfileCard
+                  profile={profile}
+                  isEditable={true}
+                  onEdit={handleEdit}
+                />
+              ) : (
+                <div className="no-profile">
+                  <div className="no-profile-icon">🎓</div>
+                  <h2>No profile yet</h2>
+                  <p>Create your profile to get AI-powered scholarship matches tailored to you.</p>
+                  <button onClick={handleCreateClick} className="create-btn">
+                    Create Profile
+                  </button>
+                </div>
+              )}
+
+              <div className="danger-zone">
+                <h3>Danger Zone</h3>
+                <p>Permanently delete your account and all associated data.</p>
+                <button
+                  onClick={() => {
+                    if (window.confirm('Are you sure you want to delete your account? This cannot be undone.')) {
+                      handleDelete();
+                    }
+                  }}
+                  className="delete-account-btn"
+                >
+                  Delete Account
                 </button>
               </div>
-            )}
-
-            {/* Delete account always visible at page level */}
-            <div className="danger-zone">
-              <h3>Danger Zone</h3>
-              <p>Permanently delete your account and all associated data.</p>
-              <button
-                onClick={() => {
-                  if (window.confirm('Are you sure you want to delete your account? This cannot be undone.')) {
-                    handleDelete();
-                  }
-                }}
-                className="delete-account-btn"
-              >
-                Delete Account
-              </button>
+            </>
+          ) : (
+            <div className="no-profile">
+              <div className="no-profile-icon">🔒</div>
+              <h2>Not logged in</h2>
+              <p>Please <Link to="/login">login</Link> to view or create your profile.</p>
             </div>
-          </>
-        ) : (
-          <div className="no-profile">
-            <div className="no-profile-icon">🔒</div>
-            <h2>Not logged in</h2>
-            <p>Please <Link to="/login">login</Link> to view or create your profile.</p>
-          </div>
-        )
-      )}
-    </div>
+          )
+        )}
+      </div>
+    </PageTransition>
   );
 };
 

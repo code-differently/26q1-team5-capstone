@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import RegistrationCard from '../Components/RegistrationCard';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import PageTransition from '../Components/PageTransition';
 
 const RegistrationPage = () => {
   const { login } = useAuth();
@@ -17,24 +18,26 @@ const RegistrationPage = () => {
   };
 
   return (
-    <div className="page-container registration-page">
-      <div className="auth-header">
-        <h1>Join Scholarship Finder</h1>
-        <p>Create your account to start discovering scholarships tailored to you.</p>
-      </div>
+    <PageTransition>
+      <div className="page-container registration-page">
+        <div className="auth-header">
+          <h1>Join Scholarship Finder</h1>
+          <p>Create your account to start discovering scholarships tailored to you.</p>
+        </div>
 
-      <div className="auth-content">
-        <RegistrationCard
-          onSuccess={handleRegistrationSuccess}
-          redirectTo="/login"
-        />
-      </div>
+        <div className="auth-content">
+          <RegistrationCard
+            onSuccess={handleRegistrationSuccess}
+            redirectTo="/login"
+          />
+        </div>
 
-      <div className="auth-footer">
-        <p>By registering, you agree to our Terms of Service and Privacy Policy.</p>
-        <Link to="/" className="back-link">← Back to Home</Link>
+        <div className="auth-footer">
+          <p>By registering, you agree to our Terms of Service and Privacy Policy.</p>
+          <Link to="/" className="back-link">← Back to Home</Link>
+        </div>
       </div>
-    </div>
+    </PageTransition>
   );
 };
 
