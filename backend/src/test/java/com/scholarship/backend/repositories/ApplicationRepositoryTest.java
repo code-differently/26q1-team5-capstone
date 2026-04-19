@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-class ApplicationRepositoryIntegrationTest {
+class ApplicationRepositoryTest {
 
     @Autowired
     private ApplicationRepository applicationRepository;

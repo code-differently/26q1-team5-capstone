@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-class ScholarshipRepositoryIntegrationTest {
+class ScholarshipRepositoryTest {
 
     @Autowired
     private ScholarshipRepository scholarshipRepository;

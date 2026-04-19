@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-class ProfileRepositoryIntegrationTest {
+class ProfileRepositoryTest {
 
     @Autowired
     private ProfileRepository profileRepository;
