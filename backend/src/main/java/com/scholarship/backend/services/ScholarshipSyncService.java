@@ -27,7 +27,7 @@ public class ScholarshipSyncService {
         for (Scholarship scholarship : incoming) {
             // Check if scholarship already exists
             Scholarship existing = scholarshipRepository
-                .findByNameAndSourceApi(scholarship.getName(), scholarship.getSourceApi());
+                    .findByNameAndSourceApi(scholarship.getName(), scholarship.getSourceApi());
 
             if (existing != null) {
                 // Update existing scholarship with new information (especially amount)
@@ -40,7 +40,6 @@ public class ScholarshipSyncService {
                 existing.setState(scholarship.getState());
                 toSave.add(existing);
             } else {
-                // New scholarship
                 toSave.add(scholarship);
             }
         }
@@ -53,8 +52,8 @@ public class ScholarshipSyncService {
     }
 
     public void syncIfNeeded() {
-    if (scholarshipRepository.count() == 0) {
-        syncFromExternalApi();
+        if (scholarshipRepository.count() == 0) {
+            syncFromExternalApi();
+        }
     }
-}
 }

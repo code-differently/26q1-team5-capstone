@@ -4,7 +4,6 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import './RegistrationCard.css';
 
-// Centralized API base URL (IMPORTANT FIX)
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 const RegistrationCard = ({ onSuccess, redirectTo = '/login' }) => {
@@ -49,7 +48,6 @@ const RegistrationCard = ({ onSuccess, redirectTo = '/login' }) => {
         password: formData.password
       };
 
-      // ✅ FIXED: Now correctly points to Railway backend
       const response = await axios.post(
         `${API_BASE_URL}/api/users/register`,
         registrationData
@@ -57,12 +55,10 @@ const RegistrationCard = ({ onSuccess, redirectTo = '/login' }) => {
 
       console.log('Registration successful:', response.data);
 
-      // Success callback
       if (onSuccess) {
         onSuccess(response.data);
       }
 
-      // Navigate after success
       navigate(redirectTo);
 
     } catch (err) {

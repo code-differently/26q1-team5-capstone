@@ -45,7 +45,7 @@ const HomePage = () => {
           <div className="feature-card">
             <div className="feature-icon">🌐</div>
             <h3>Always Up to Date</h3>
-            <p>We search the web in real time so you always see current, active scholarship opportunities.</p>
+            <p>Browse current scholarship opportunities organized in one place.</p>
           </div>
         </div>
 

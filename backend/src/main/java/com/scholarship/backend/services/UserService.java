@@ -21,7 +21,6 @@ public class UserService {
             throw new IllegalArgumentException("Username already exists: " + username);
         }
 
-        // TEMP: store password as-is (no hashing for now)
         User user = new User(username, password, "STUDENT");
 
         return userRepository.save(user);
@@ -30,7 +29,6 @@ public class UserService {
     public User authenticate(String username, String password) {
         User user = userRepository.findByUsername(username);
 
-        // TEMP: plain text comparison
         if (user != null && user.getPasswordHash().equals(password)) {
             return user;
         }

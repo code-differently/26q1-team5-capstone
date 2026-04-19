@@ -37,7 +37,6 @@ public class ApplicationService {
             throw new IllegalArgumentException("Scholarship not found with ID: " + scholarshipId);
         }
 
-        // Check across ALL statuses, not just SAVED
         List<Application> existingApplications = applicationRepository.findByUser_UserId(userId);
         boolean alreadyApplied = existingApplications.stream()
                 .anyMatch(app -> app.getScholarship().getScholarshipId() == scholarshipId);
@@ -56,13 +55,10 @@ public class ApplicationService {
             throw new IllegalArgumentException("Application not found with ID: " + applicationId);
         }
 
-        // Validate status transition
         validateTransition(application.getStatus(), newStatus);
 
-        // Update status
         application.setStatus(newStatus);
 
-        // Set submitted date if moving to SUBMITTED
         if (newStatus == ApplicationStatus.SUBMITTED) {
             application.setSubmittedDate(LocalDate.now());
         }
@@ -72,7 +68,7 @@ public class ApplicationService {
 
     public void validateTransition(ApplicationStatus from, ApplicationStatus to) {
         if (from == to)
-            return; // No-op, always valid
+            return;
 
         switch (from) {
             case SAVED:

@@ -25,7 +25,7 @@ const ScholarshipPage = () => {
           deadline: sch.deadline,
           fieldOfStudy: sch.fieldOfStudy || 'General',
           eligibility: sch.eligibilityCriteria || 'Check application for details',
-          requirements: [] // Backend doesn't have this, set to empty
+          requirements: []
         }));
         setScholarships(data);
       } catch (error) {

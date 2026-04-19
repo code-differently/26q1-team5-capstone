@@ -70,7 +70,6 @@ public class MatchPromptBuilder {
         List<Scholarship> scholarships = new ArrayList<>();
 
         try {
-            // Strip markdown code blocks if the model returns them anyway
             String cleaned = response.trim();
             if (cleaned.startsWith("```")) {
                 cleaned = cleaned.replaceAll("```json", "").replaceAll("```", "").trim();
@@ -112,10 +111,6 @@ public class MatchPromptBuilder {
 
         return scholarships;
     }
-
-    // -------------------------
-    // DTO for JSON deserialization
-    // -------------------------
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     static class ScholarshipDTO {

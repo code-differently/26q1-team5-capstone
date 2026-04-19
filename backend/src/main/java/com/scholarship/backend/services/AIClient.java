@@ -16,7 +16,6 @@ public class AIClient {
     @Value("${ai.api.key}")
     private String apiKey;
 
-    // Update this in application.properties too — see below
     @Value("${ai.api.url:https://api.anthropic.com/v1/messages}")
     private String apiUrl;
 

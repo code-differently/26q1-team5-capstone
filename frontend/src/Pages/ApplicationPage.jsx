@@ -8,7 +8,7 @@ const ApplicationPage = () => {
   const { user } = useAuth();
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('ALL'); // ALL, SAVED, SUBMITTED, IN_PROGRESS
+  const [filter, setFilter] = useState('ALL');
   const API = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
