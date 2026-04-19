@@ -19,36 +19,33 @@ public class ApplicationService {
 
     @Autowired
     public ApplicationService(ApplicationRepository applicationRepository,
-                             UserRepository userRepository,
-                             ScholarshipRepository scholarshipRepository) {
+            UserRepository userRepository,
+            ScholarshipRepository scholarshipRepository) {
         this.applicationRepository = applicationRepository;
         this.userRepository = userRepository;
         this.scholarshipRepository = scholarshipRepository;
     }
 
     public Application createApplication(long userId, long scholarshipId) {
-        // Validate that user exists
         User user = userRepository.findById(userId).orElse(null);
         if (user == null) {
             throw new IllegalArgumentException("User not found with ID: " + userId);
         }
 
-        // Validate that scholarship exists
         Scholarship scholarship = scholarshipRepository.findById(scholarshipId).orElse(null);
         if (scholarship == null) {
             throw new IllegalArgumentException("Scholarship not found with ID: " + scholarshipId);
         }
 
-        // Check if application already exists
-        List<Application> existingApplications = applicationRepository.findByUser_UserIdAndStatus(userId, ApplicationStatus.SAVED);
+        // Check across ALL statuses, not just SAVED
+        List<Application> existingApplications = applicationRepository.findByUser_UserId(userId);
         boolean alreadyApplied = existingApplications.stream()
                 .anyMatch(app -> app.getScholarship().getScholarshipId() == scholarshipId);
 
         if (alreadyApplied) {
-            throw new IllegalArgumentException("Application already exists for this user and scholarship");
+            throw new IllegalArgumentException("You already have an application for this scholarship");
         }
 
-        // Create new application
         Application application = new Application(user, scholarship);
         return applicationRepository.save(application);
     }
@@ -74,47 +71,48 @@ public class ApplicationService {
     }
 
     public void validateTransition(ApplicationStatus from, ApplicationStatus to) {
-    if (from == to) return; // No-op, always valid
+        if (from == to)
+            return; // No-op, always valid
 
-    switch (from) {
-        case SAVED:
-            if (to != ApplicationStatus.IN_PROGRESS &&
-                to != ApplicationStatus.SUBMITTED &&
-                to != ApplicationStatus.AWARDED &&
-                to != ApplicationStatus.REJECTED) {
-                throw new IllegalArgumentException("Invalid transition from " + from + " to " + to);
-            }
-            break;
-        case IN_PROGRESS:
-            if (to != ApplicationStatus.SAVED &&
-                to != ApplicationStatus.SUBMITTED &&
-                to != ApplicationStatus.AWARDED &&
-                to != ApplicationStatus.REJECTED) {
-                throw new IllegalArgumentException("Invalid transition from " + from + " to " + to);
-            }
-            break;
-        case SUBMITTED:
-            if (to != ApplicationStatus.AWARDED &&
-                to != ApplicationStatus.REJECTED &&
-                to != ApplicationStatus.IN_PROGRESS) {
-                throw new IllegalArgumentException("Invalid transition from " + from + " to " + to);
-            }
-            break;
-        case AWARDED:
-            if (to != ApplicationStatus.REJECTED) {
-                throw new IllegalArgumentException("Invalid transition from " + from + " to " + to);
-            }
-            break;
-        case REJECTED:
-            if (to != ApplicationStatus.SAVED &&
-                to != ApplicationStatus.IN_PROGRESS) {
-                throw new IllegalArgumentException("Invalid transition from " + from + " to " + to);
-            }
-            break;
-        default:
-            throw new IllegalArgumentException("Unknown status: " + from);
+        switch (from) {
+            case SAVED:
+                if (to != ApplicationStatus.IN_PROGRESS &&
+                        to != ApplicationStatus.SUBMITTED &&
+                        to != ApplicationStatus.AWARDED &&
+                        to != ApplicationStatus.REJECTED) {
+                    throw new IllegalArgumentException("Invalid transition from " + from + " to " + to);
+                }
+                break;
+            case IN_PROGRESS:
+                if (to != ApplicationStatus.SAVED &&
+                        to != ApplicationStatus.SUBMITTED &&
+                        to != ApplicationStatus.AWARDED &&
+                        to != ApplicationStatus.REJECTED) {
+                    throw new IllegalArgumentException("Invalid transition from " + from + " to " + to);
+                }
+                break;
+            case SUBMITTED:
+                if (to != ApplicationStatus.AWARDED &&
+                        to != ApplicationStatus.REJECTED &&
+                        to != ApplicationStatus.IN_PROGRESS) {
+                    throw new IllegalArgumentException("Invalid transition from " + from + " to " + to);
+                }
+                break;
+            case AWARDED:
+                if (to != ApplicationStatus.REJECTED) {
+                    throw new IllegalArgumentException("Invalid transition from " + from + " to " + to);
+                }
+                break;
+            case REJECTED:
+                if (to != ApplicationStatus.SAVED &&
+                        to != ApplicationStatus.IN_PROGRESS) {
+                    throw new IllegalArgumentException("Invalid transition from " + from + " to " + to);
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown status: " + from);
+        }
     }
-}
 
     public List<Application> getApplications(long userId) {
         return applicationRepository.findByUser_UserId(userId);
