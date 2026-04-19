@@ -14,7 +14,7 @@ const HomePage = () => {
         <div className="hero-section">
           <div className="hero-text">
             <h1>Find Scholarships <span className="hero-accent">Made for You</span></h1>
-            <p>Scholarship Finder uses AI to match you with scholarships that fit your unique background, goals, and interests — so you can focus on what matters most.</p>
+            <p>Scholarship Finder uses AI to match you with scholarships that fit your unique background, goals, and interests so you can focus on what matters most.</p>
             <div className="hero-actions">
               {user ? (
                 <Link to="/scholarships" className="hero-btn-primary">Browse Scholarships</Link>
