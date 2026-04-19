@@ -34,7 +34,7 @@ const LoginPage = () => {
     <PageTransition>
       <div className="page-container registration-page">
         <div className="auth-header">
-          <h1>Welcome Back</h1>
+          <h1>Welcome Back!</h1>
           <p>Sign in to continue discovering scholarships tailored to you.</p>
         </div>
 

@@ -78,9 +78,11 @@ const ApplicationPage = () => {
 
   if (loading) {
     return (
-      <div className="page-container">
-        <div className="loading">Loading applications...</div>
-      </div>
+      <PageTransition>
+        <div className="page-container">
+          <div className="loading">Loading applications...</div>
+        </div>
+      </PageTransition>
     );
   }
 
