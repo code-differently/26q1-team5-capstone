@@ -72,12 +72,9 @@ public class ExternalApiClient {
         scholarship.setApplicationUrl("https://grants.gov/search-results-detail/" + hit.getId());
         scholarship.setSourceApi("GRANTS_GOV");
 
-        // Set a default amount based on agency or scholarship type
-        // Since Grants.gov API requires authentication for detailed amounts,
-        // we'll use reasonable defaults for the capstone project
         scholarship.setAmount(generateDefaultAmount(hit));
 
-        // Parse closeDate — Grants.gov format is MM/dd/yyyy
+        // Parse closeDate safely
         if (hit.getCloseDate() != null && !hit.getCloseDate().isBlank()) {
             try {
                 scholarship.setDeadline(LocalDate.parse(hit.getCloseDate(), GRANTS_DATE_FORMAT));
@@ -112,9 +109,6 @@ public class ExternalApiClient {
         }
     }
 
-    // -------------------------
-    // Inner classes for deserialization
-    // -------------------------
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     static class GrantsGovResponse {

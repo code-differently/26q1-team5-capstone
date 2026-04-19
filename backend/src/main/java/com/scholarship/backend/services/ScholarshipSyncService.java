@@ -40,7 +40,6 @@ public class ScholarshipSyncService {
                 existing.setState(scholarship.getState());
                 toSave.add(existing);
             } else {
-                // New scholarship
                 toSave.add(scholarship);
             }
         }
