@@ -41,7 +41,9 @@ class ApplicationServiceTest {
     @BeforeEach
     void setUp() {
         testUser = new User("jayden", "password123", "STUDENT");
+        testUser.setUserId(1L); // add this line
         testScholarship = new Scholarship("NSF STEM Scholarship", 5000.0, LocalDate.of(2027, 1, 1));
+        testScholarship.setScholarshipId(1L); // add this line
         testApplication = new Application(testUser, testScholarship);
     }
 
@@ -65,9 +67,8 @@ class ApplicationServiceTest {
         when(userRepository.findById(99L)).thenReturn(Optional.empty());
 
         IllegalArgumentException ex = assertThrows(
-            IllegalArgumentException.class,
-            () -> applicationService.createApplication(99L, 1L)
-        );
+                IllegalArgumentException.class,
+                () -> applicationService.createApplication(99L, 1L));
 
         assertTrue(ex.getMessage().contains("User not found"));
         verify(applicationRepository, never()).save(any(Application.class));
@@ -79,9 +80,8 @@ class ApplicationServiceTest {
         when(scholarshipRepository.findById(99L)).thenReturn(Optional.empty());
 
         IllegalArgumentException ex = assertThrows(
-            IllegalArgumentException.class,
-            () -> applicationService.createApplication(1L, 99L)
-        );
+                IllegalArgumentException.class,
+                () -> applicationService.createApplication(1L, 99L));
 
         assertTrue(ex.getMessage().contains("Scholarship not found"));
         verify(applicationRepository, never()).save(any(Application.class));
@@ -94,9 +94,8 @@ class ApplicationServiceTest {
         when(applicationRepository.findByUser_UserId(1L)).thenReturn(List.of(testApplication));
 
         IllegalArgumentException ex = assertThrows(
-            IllegalArgumentException.class,
-            () -> applicationService.createApplication(1L, testScholarship.getScholarshipId())
-        );
+                IllegalArgumentException.class,
+                () -> applicationService.createApplication(1L, testScholarship.getScholarshipId()));
 
         assertTrue(ex.getMessage().contains("already have an application"));
         verify(applicationRepository, never()).save(any(Application.class));
@@ -134,9 +133,8 @@ class ApplicationServiceTest {
         when(applicationRepository.findById(99L)).thenReturn(Optional.empty());
 
         IllegalArgumentException ex = assertThrows(
-            IllegalArgumentException.class,
-            () -> applicationService.updateStatus(99L, ApplicationStatus.SUBMITTED)
-        );
+                IllegalArgumentException.class,
+                () -> applicationService.updateStatus(99L, ApplicationStatus.SUBMITTED));
 
         assertTrue(ex.getMessage().contains("Application not found"));
         verify(applicationRepository, never()).save(any(Application.class));
@@ -146,119 +144,103 @@ class ApplicationServiceTest {
 
     @Test
     void validateTransition_SameStatusIsNoOp() {
-        assertDoesNotThrow(() ->
-            applicationService.validateTransition(ApplicationStatus.SAVED, ApplicationStatus.SAVED)
-        );
+        assertDoesNotThrow(
+                () -> applicationService.validateTransition(ApplicationStatus.SAVED, ApplicationStatus.SAVED));
     }
 
     @Test
     void validateTransition_SavedToInProgress() {
-        assertDoesNotThrow(() ->
-            applicationService.validateTransition(ApplicationStatus.SAVED, ApplicationStatus.IN_PROGRESS)
-        );
+        assertDoesNotThrow(
+                () -> applicationService.validateTransition(ApplicationStatus.SAVED, ApplicationStatus.IN_PROGRESS));
     }
 
     @Test
     void validateTransition_SavedToSubmitted() {
-        assertDoesNotThrow(() ->
-            applicationService.validateTransition(ApplicationStatus.SAVED, ApplicationStatus.SUBMITTED)
-        );
+        assertDoesNotThrow(
+                () -> applicationService.validateTransition(ApplicationStatus.SAVED, ApplicationStatus.SUBMITTED));
     }
 
     @Test
     void validateTransition_SavedToAwarded() {
-        assertDoesNotThrow(() ->
-            applicationService.validateTransition(ApplicationStatus.SAVED, ApplicationStatus.AWARDED)
-        );
+        assertDoesNotThrow(
+                () -> applicationService.validateTransition(ApplicationStatus.SAVED, ApplicationStatus.AWARDED));
     }
 
     @Test
     void validateTransition_SavedToRejected() {
-        assertDoesNotThrow(() ->
-            applicationService.validateTransition(ApplicationStatus.SAVED, ApplicationStatus.REJECTED)
-        );
+        assertDoesNotThrow(
+                () -> applicationService.validateTransition(ApplicationStatus.SAVED, ApplicationStatus.REJECTED));
     }
 
     @Test
     void validateTransition_InProgressToSubmitted() {
-        assertDoesNotThrow(() ->
-            applicationService.validateTransition(ApplicationStatus.IN_PROGRESS, ApplicationStatus.SUBMITTED)
-        );
+        assertDoesNotThrow(() -> applicationService.validateTransition(ApplicationStatus.IN_PROGRESS,
+                ApplicationStatus.SUBMITTED));
     }
 
     @Test
     void validateTransition_InProgressToSaved() {
-        assertDoesNotThrow(() ->
-            applicationService.validateTransition(ApplicationStatus.IN_PROGRESS, ApplicationStatus.SAVED)
-        );
+        assertDoesNotThrow(
+                () -> applicationService.validateTransition(ApplicationStatus.IN_PROGRESS, ApplicationStatus.SAVED));
     }
 
     @Test
     void validateTransition_SubmittedToAwarded() {
-        assertDoesNotThrow(() ->
-            applicationService.validateTransition(ApplicationStatus.SUBMITTED, ApplicationStatus.AWARDED)
-        );
+        assertDoesNotThrow(
+                () -> applicationService.validateTransition(ApplicationStatus.SUBMITTED, ApplicationStatus.AWARDED));
     }
 
     @Test
     void validateTransition_SubmittedToRejected() {
-        assertDoesNotThrow(() ->
-            applicationService.validateTransition(ApplicationStatus.SUBMITTED, ApplicationStatus.REJECTED)
-        );
+        assertDoesNotThrow(
+                () -> applicationService.validateTransition(ApplicationStatus.SUBMITTED, ApplicationStatus.REJECTED));
     }
 
     @Test
     void validateTransition_SubmittedToInProgress() {
-        assertDoesNotThrow(() ->
-            applicationService.validateTransition(ApplicationStatus.SUBMITTED, ApplicationStatus.IN_PROGRESS)
-        );
+        assertDoesNotThrow(() -> applicationService.validateTransition(ApplicationStatus.SUBMITTED,
+                ApplicationStatus.IN_PROGRESS));
     }
 
     @Test
     void validateTransition_AwardedToRejected() {
-        assertDoesNotThrow(() ->
-            applicationService.validateTransition(ApplicationStatus.AWARDED, ApplicationStatus.REJECTED)
-        );
+        assertDoesNotThrow(
+                () -> applicationService.validateTransition(ApplicationStatus.AWARDED, ApplicationStatus.REJECTED));
     }
 
     @Test
     void validateTransition_RejectedToSaved() {
-        assertDoesNotThrow(() ->
-            applicationService.validateTransition(ApplicationStatus.REJECTED, ApplicationStatus.SAVED)
-        );
+        assertDoesNotThrow(
+                () -> applicationService.validateTransition(ApplicationStatus.REJECTED, ApplicationStatus.SAVED));
     }
 
     @Test
     void validateTransition_RejectedToInProgress() {
-        assertDoesNotThrow(() ->
-            applicationService.validateTransition(ApplicationStatus.REJECTED, ApplicationStatus.IN_PROGRESS)
-        );
+        assertDoesNotThrow(
+                () -> applicationService.validateTransition(ApplicationStatus.REJECTED, ApplicationStatus.IN_PROGRESS));
     }
 
     @Test
     void validateTransition_ThrowsOnInvalidTransitionFromAwarded() {
         IllegalArgumentException ex = assertThrows(
-            IllegalArgumentException.class,
-            () -> applicationService.validateTransition(ApplicationStatus.AWARDED, ApplicationStatus.SAVED)
-        );
+                IllegalArgumentException.class,
+                () -> applicationService.validateTransition(ApplicationStatus.AWARDED, ApplicationStatus.SAVED));
         assertTrue(ex.getMessage().contains("Invalid transition"));
     }
 
     @Test
     void validateTransition_ThrowsOnInvalidTransitionFromRejected() {
         IllegalArgumentException ex = assertThrows(
-            IllegalArgumentException.class,
-            () -> applicationService.validateTransition(ApplicationStatus.REJECTED, ApplicationStatus.SUBMITTED)
-        );
+                IllegalArgumentException.class,
+                () -> applicationService.validateTransition(ApplicationStatus.REJECTED, ApplicationStatus.SUBMITTED));
         assertTrue(ex.getMessage().contains("Invalid transition"));
     }
 
     @Test
     void validateTransition_ThrowsOnInvalidTransitionFromSubmitted() {
         IllegalArgumentException ex = assertThrows(
-            IllegalArgumentException.class,
-            () -> applicationService.validateTransition(ApplicationStatus.SUBMITTED, ApplicationStatus.SAVED)
-        );
+                IllegalArgumentException.class,
+                () -> applicationService.validateTransition(ApplicationStatus.SUBMITTED, ApplicationStatus.SAVED));
         assertTrue(ex.getMessage().contains("Invalid transition"));
     }
 

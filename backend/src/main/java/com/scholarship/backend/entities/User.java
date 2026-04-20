@@ -68,6 +68,10 @@ public class User {
     }
 
     // Setters
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
