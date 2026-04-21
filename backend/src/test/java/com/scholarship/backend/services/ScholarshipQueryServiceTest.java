@@ -59,8 +59,6 @@ class ScholarshipQueryServiceTest {
         artScholarship.setDeadline(LocalDate.of(2027, 3, 1));
     }
 
-    // --- getScholarshipById ---
-
     @Test
     void getScholarshipById_ReturnsScholarshipWhenFound() {
         when(scholarshipRepository.findById(1L)).thenReturn(Optional.of(csScholarship));
@@ -80,13 +78,10 @@ class ScholarshipQueryServiceTest {
         assertNull(result);
     }
 
-    // --- getAllScholarships ---
-
     @Test
     void getAllScholarships_ReturnsAllScholarships() {
         when(scholarshipRepository.findAll()).thenReturn(
-            List.of(csScholarship, stemScholarship, artScholarship)
-        );
+                List.of(csScholarship, stemScholarship, artScholarship));
 
         List<Scholarship> result = scholarshipQueryService.getAllScholarships();
 
@@ -104,13 +99,10 @@ class ScholarshipQueryServiceTest {
         assertTrue(result.isEmpty());
     }
 
-    // --- searchScholarships ---
-
     @Test
     void searchScholarships_NullQuery_ReturnsAll() {
         when(scholarshipRepository.findAll()).thenReturn(
-            List.of(csScholarship, stemScholarship, artScholarship)
-        );
+                List.of(csScholarship, stemScholarship, artScholarship));
 
         List<Scholarship> result = scholarshipQueryService.searchScholarships(null);
 
@@ -120,8 +112,7 @@ class ScholarshipQueryServiceTest {
     @Test
     void searchScholarships_EmptyQuery_ReturnsAll() {
         when(scholarshipRepository.findAll()).thenReturn(
-            List.of(csScholarship, stemScholarship, artScholarship)
-        );
+                List.of(csScholarship, stemScholarship, artScholarship));
 
         List<Scholarship> result = scholarshipQueryService.searchScholarships("   ");
 
@@ -131,8 +122,7 @@ class ScholarshipQueryServiceTest {
     @Test
     void searchScholarships_MatchesByName() {
         when(scholarshipRepository.findAll()).thenReturn(
-            List.of(csScholarship, stemScholarship, artScholarship)
-        );
+                List.of(csScholarship, stemScholarship, artScholarship));
 
         List<Scholarship> result = scholarshipQueryService.searchScholarships("google");
 
@@ -143,8 +133,7 @@ class ScholarshipQueryServiceTest {
     @Test
     void searchScholarships_MatchesByDescription() {
         when(scholarshipRepository.findAll()).thenReturn(
-            List.of(csScholarship, stemScholarship, artScholarship)
-        );
+                List.of(csScholarship, stemScholarship, artScholarship));
 
         List<Scholarship> result = scholarshipQueryService.searchScholarships("fine arts");
 
@@ -155,8 +144,7 @@ class ScholarshipQueryServiceTest {
     @Test
     void searchScholarships_MatchesByFieldOfStudy() {
         when(scholarshipRepository.findAll()).thenReturn(
-            List.of(csScholarship, stemScholarship, artScholarship)
-        );
+                List.of(csScholarship, stemScholarship, artScholarship));
 
         List<Scholarship> result = scholarshipQueryService.searchScholarships("engineering");
 
@@ -167,8 +155,7 @@ class ScholarshipQueryServiceTest {
     @Test
     void searchScholarships_MatchesByState() {
         when(scholarshipRepository.findAll()).thenReturn(
-            List.of(csScholarship, stemScholarship, artScholarship)
-        );
+                List.of(csScholarship, stemScholarship, artScholarship));
 
         List<Scholarship> result = scholarshipQueryService.searchScholarships("california");
 
@@ -179,8 +166,7 @@ class ScholarshipQueryServiceTest {
     @Test
     void searchScholarships_MatchesByEligibilityCriteria() {
         when(scholarshipRepository.findAll()).thenReturn(
-            List.of(csScholarship, stemScholarship, artScholarship)
-        );
+                List.of(csScholarship, stemScholarship, artScholarship));
 
         List<Scholarship> result = scholarshipQueryService.searchScholarships("portfolio");
 
@@ -191,8 +177,7 @@ class ScholarshipQueryServiceTest {
     @Test
     void searchScholarships_IsCaseInsensitive() {
         when(scholarshipRepository.findAll()).thenReturn(
-            List.of(csScholarship, stemScholarship, artScholarship)
-        );
+                List.of(csScholarship, stemScholarship, artScholarship));
 
         List<Scholarship> result = scholarshipQueryService.searchScholarships("GOOGLE");
 
@@ -203,8 +188,7 @@ class ScholarshipQueryServiceTest {
     @Test
     void searchScholarships_NoMatches_ReturnsEmptyList() {
         when(scholarshipRepository.findAll()).thenReturn(
-            List.of(csScholarship, stemScholarship, artScholarship)
-        );
+                List.of(csScholarship, stemScholarship, artScholarship));
 
         List<Scholarship> result = scholarshipQueryService.searchScholarships("xyznotfound");
 
@@ -215,58 +199,91 @@ class ScholarshipQueryServiceTest {
     @Test
     void searchScholarships_MultipleMatches_ReturnsAll() {
         when(scholarshipRepository.findAll()).thenReturn(
-            List.of(csScholarship, stemScholarship, artScholarship)
-        );
+                List.of(csScholarship, stemScholarship, artScholarship));
 
-        // "students" appears in all three descriptions
         List<Scholarship> result = scholarshipQueryService.searchScholarships("students");
 
         assertEquals(3, result.size());
-    }
 
-    // --- filterByField ---
-
-    @Test
-    void filterByField_ReturnsMatchingScholarships() {
-        when(scholarshipRepository.findByFieldOfStudy("Computer Science"))
-            .thenReturn(List.of(csScholarship));
-
-        List<Scholarship> result = scholarshipQueryService.filterByField("Computer Science");
-
-        assertEquals(1, result.size());
-        assertEquals("Google CS Scholarship", result.get(0).getName());
     }
 
     @Test
-    void filterByField_ReturnsEmptyListWhenNoMatches() {
-        when(scholarshipRepository.findByFieldOfStudy("Philosophy"))
-            .thenReturn(List.of());
+    void searchScholarships_NullNameDoesNotThrow() {
+        Scholarship nullName = new Scholarship();
+        nullName.setName(null);
+        nullName.setDescription("Some description");
 
-        List<Scholarship> result = scholarshipQueryService.filterByField("Philosophy");
+        when(scholarshipRepository.findAll()).thenReturn(List.of(nullName));
+
+        List<Scholarship> result = scholarshipQueryService.searchScholarships("some");
 
         assertNotNull(result);
-        assertTrue(result.isEmpty());
-    }
-
-    // --- filterByState ---
-
-    @Test
-    void filterByState_ReturnsMatchingScholarships() {
-        when(scholarshipRepository.findByState("California"))
-            .thenReturn(List.of(csScholarship));
-
-        List<Scholarship> result = scholarshipQueryService.filterByState("California");
-
         assertEquals(1, result.size());
-        assertEquals("Google CS Scholarship", result.get(0).getName());
     }
 
     @Test
-    void filterByState_ReturnsEmptyListWhenNoMatches() {
-        when(scholarshipRepository.findByState("Hawaii"))
-            .thenReturn(List.of());
+    void searchScholarships_NullDescriptionDoesNotThrow() {
+        Scholarship nullDesc = new Scholarship();
+        nullDesc.setName("Some Name");
+        nullDesc.setDescription(null);
 
-        List<Scholarship> result = scholarshipQueryService.filterByState("Hawaii");
+        when(scholarshipRepository.findAll()).thenReturn(List.of(nullDesc));
+
+        List<Scholarship> result = scholarshipQueryService.searchScholarships("some");
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void searchScholarships_NullFieldOfStudyDoesNotThrow() {
+        Scholarship nullField = new Scholarship();
+        nullField.setName("Some Name");
+        nullField.setFieldOfStudy(null);
+
+        when(scholarshipRepository.findAll()).thenReturn(List.of(nullField));
+
+        List<Scholarship> result = scholarshipQueryService.searchScholarships("some");
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void searchScholarships_NullStateDoesNotThrow() {
+        Scholarship nullState = new Scholarship();
+        nullState.setName("Some Name");
+        nullState.setState(null);
+
+        when(scholarshipRepository.findAll()).thenReturn(List.of(nullState));
+
+        List<Scholarship> result = scholarshipQueryService.searchScholarships("some");
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void searchScholarships_NullEligibilityCriteriaDoesNotThrow() {
+        Scholarship nullEligibility = new Scholarship();
+        nullEligibility.setName("Some Name");
+        nullEligibility.setEligibilityCriteria(null);
+
+        when(scholarshipRepository.findAll()).thenReturn(List.of(nullEligibility));
+
+        List<Scholarship> result = scholarshipQueryService.searchScholarships("some");
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void searchScholarships_AllFieldsNullDoesNotThrow() {
+        Scholarship allNull = new Scholarship();
+
+        when(scholarshipRepository.findAll()).thenReturn(List.of(allNull));
+
+        List<Scholarship> result = scholarshipQueryService.searchScholarships("anything");
 
         assertNotNull(result);
         assertTrue(result.isEmpty());

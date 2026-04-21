@@ -276,4 +276,12 @@ class ApplicationServiceTest {
 
         verify(applicationRepository, times(1)).deleteById(1L);
     }
+
+    @Test
+    void validateTransition_ThrowsOnInvalidTransitionFromInProgress() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> applicationService.validateTransition(ApplicationStatus.IN_PROGRESS, ApplicationStatus.AWARDED));
+        assertTrue(ex.getMessage().contains("Invalid transition"));
+    }
 }
