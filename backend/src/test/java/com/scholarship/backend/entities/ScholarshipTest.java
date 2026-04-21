@@ -121,5 +121,3 @@ class ScholarshipTest {
         assertTrue(scholarship.getScholarshipId() >= 0);
     }
 }
-
-

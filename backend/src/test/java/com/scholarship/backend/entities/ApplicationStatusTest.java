@@ -39,4 +39,3 @@ class ApplicationStatusTest {
         assertEquals(4, ApplicationStatus.REJECTED.ordinal());
     }
 }
-
