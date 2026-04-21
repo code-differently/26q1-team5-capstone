@@ -136,5 +136,3 @@ class ApplicationTest {
         assertEquals(newScholarship, application.getScholarship());
     }
 }
-
-

@@ -43,7 +43,8 @@ public class Scholarship {
     @OneToMany(mappedBy = "scholarship", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Application> applications = new ArrayList<>();
 
-    public Scholarship() {}
+    public Scholarship() {
+    }
 
     public Scholarship(String name, Double amount, LocalDate deadline) {
         this.name = name;
@@ -138,6 +139,6 @@ public class Scholarship {
     }
 
     public void setScholarshipId(long scholarshipId) {
-    this.scholarshipId = scholarshipId;
-}
+        this.scholarshipId = scholarshipId;
+    }
 }

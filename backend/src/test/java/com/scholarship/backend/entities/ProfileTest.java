@@ -126,4 +126,3 @@ class ProfileTest {
         assertEquals(user, profile.getUser());
     }
 }
-
