@@ -136,4 +136,8 @@ public class Scholarship {
     public void setApplications(List<Application> applications) {
         this.applications = applications;
     }
+
+    public void setScholarshipId(long scholarshipId) {
+    this.scholarshipId = scholarshipId;
+}
 }

@@ -70,8 +70,8 @@ class UserTest {
 
     @Test
     void testUserApplicationsCollection() {
-        assertTrue(user.getApplications().isEmpty());
         assertNotNull(user.getApplications());
+        assertTrue(user.getApplications().isEmpty());
     }
 
     @Test
@@ -84,7 +84,14 @@ class UserTest {
 
     @Test
     void testGetUserId() {
-        assertTrue(user.getUserId() >= 0);
+        user.setUserId(1L);
+        assertEquals(1L, user.getUserId());
+    }
+
+    @Test
+    void testUserIdInitiallyNull() {
+        User newUser = new User();
+        assertNull(newUser.getUserId());
     }
 
     @Test
@@ -97,6 +104,3 @@ class UserTest {
         assertEquals("STUDENT", user.getRole());
     }
 }
-
-
-

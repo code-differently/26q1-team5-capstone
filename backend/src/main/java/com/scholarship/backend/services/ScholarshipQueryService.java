@@ -30,25 +30,21 @@ public class ScholarshipQueryService {
         String lowerQuery = query.toLowerCase().trim();
 
         return scholarshipRepository.findAll().stream()
-                .filter(scholarship ->
-                    scholarship.getName() != null && scholarship.getName().toLowerCase().contains(lowerQuery) ||
-                    scholarship.getDescription() != null && scholarship.getDescription().toLowerCase().contains(lowerQuery) ||
-                    scholarship.getFieldOfStudy() != null && scholarship.getFieldOfStudy().toLowerCase().contains(lowerQuery) ||
-                    scholarship.getState() != null && scholarship.getState().toLowerCase().contains(lowerQuery) ||
-                    scholarship.getEligibilityCriteria() != null && scholarship.getEligibilityCriteria().toLowerCase().contains(lowerQuery)
-                )
+                .filter(scholarship -> scholarship.getName() != null
+                        && scholarship.getName().toLowerCase().contains(lowerQuery) ||
+                        scholarship.getDescription() != null
+                                && scholarship.getDescription().toLowerCase().contains(lowerQuery)
+                        ||
+                        scholarship.getFieldOfStudy() != null
+                                && scholarship.getFieldOfStudy().toLowerCase().contains(lowerQuery)
+                        ||
+                        scholarship.getState() != null && scholarship.getState().toLowerCase().contains(lowerQuery) ||
+                        scholarship.getEligibilityCriteria() != null
+                                && scholarship.getEligibilityCriteria().toLowerCase().contains(lowerQuery))
                 .collect(Collectors.toList());
     }
 
     public List<Scholarship> getAllScholarships() {
-    return scholarshipRepository.findAll();
-}
-
-    public List<Scholarship> filterByField(String field) {
-        return scholarshipRepository.findByFieldOfStudy(field);
-    }
-
-    public List<Scholarship> filterByState(String state) {
-        return scholarshipRepository.findByState(state);
+        return scholarshipRepository.findAll();
     }
 }

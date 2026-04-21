@@ -28,7 +28,7 @@ const RegistrationPage = () => {
         <div className="auth-content">
           <RegistrationCard
             onSuccess={handleRegistrationSuccess}
-            redirectTo="/login"
+            redirectTo="/profile"
           />
         </div>
 

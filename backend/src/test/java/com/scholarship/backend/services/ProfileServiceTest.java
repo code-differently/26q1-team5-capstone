@@ -35,6 +35,7 @@ class ProfileServiceTest {
     @BeforeEach
     void setUp() {
         testUser = new User("jayden", "password123", "STUDENT");
+        testUser.setUserId(1L); // add this line
         testProfile = new Profile();
         testProfile.setUser(testUser);
         testProfile.setName("Jayden");
@@ -67,9 +68,8 @@ class ProfileServiceTest {
         when(profileRepository.findByUser_UserId(testUser.getUserId())).thenReturn(testProfile);
 
         IllegalArgumentException ex = assertThrows(
-            IllegalArgumentException.class,
-            () -> profileService.createProfile(testProfile)
-        );
+                IllegalArgumentException.class,
+                () -> profileService.createProfile(testProfile));
 
         assertTrue(ex.getMessage().contains("Profile already exists"));
         verify(profileRepository, never()).save(any(Profile.class));
@@ -134,9 +134,8 @@ class ProfileServiceTest {
         when(profileRepository.findById(99L)).thenReturn(Optional.empty());
 
         IllegalArgumentException ex = assertThrows(
-            IllegalArgumentException.class,
-            () -> profileService.updateProfile(99L, testProfile)
-        );
+                IllegalArgumentException.class,
+                () -> profileService.updateProfile(99L, testProfile));
 
         assertTrue(ex.getMessage().contains("Profile not found with ID"));
         verify(profileRepository, never()).save(any(Profile.class));
@@ -159,9 +158,8 @@ class ProfileServiceTest {
         when(profileRepository.findByUser_UserId(99L)).thenReturn(null);
 
         IllegalArgumentException ex = assertThrows(
-            IllegalArgumentException.class,
-            () -> profileService.deleteProfile(99L)
-        );
+                IllegalArgumentException.class,
+                () -> profileService.deleteProfile(99L));
 
         assertTrue(ex.getMessage().contains("Profile not found for user"));
         verify(userRepository, never()).deleteById(any());

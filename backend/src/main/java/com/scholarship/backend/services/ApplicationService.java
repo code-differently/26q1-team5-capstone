@@ -105,8 +105,6 @@ public class ApplicationService {
                     throw new IllegalArgumentException("Invalid transition from " + from + " to " + to);
                 }
                 break;
-            default:
-                throw new IllegalArgumentException("Unknown status: " + from);
         }
     }
 
